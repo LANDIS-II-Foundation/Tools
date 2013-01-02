@@ -36,7 +36,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\6.0\bin\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -79,24 +79,8 @@
   <ItemGroup>
     <Reference Include="Landis.Console-6.0, Version=6.0.4667.20106, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files\LANDIS-II\v6\bin\Landis.Console-6.0.exe</HintPath>
+      <HintPath>..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\Landis.Console-6.0.exe</HintPath>
     </Reference>
-    <Reference Include="Landis.RasterIO, Version=0.91.4665.27498, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.RasterIO.dll</HintPath>
-    </Reference>
-    <Reference Include="Landis.RasterIO.Gdal, Version=0.91.4665.27499, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.RasterIO.Gdal.dll</HintPath>
-    </Reference>
-    <Reference Include="Landis.SpatialModeling">
-      <HintPath>..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.SpatialModeling.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
