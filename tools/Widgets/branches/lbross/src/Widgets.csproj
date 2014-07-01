@@ -34,36 +34,31 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Edu.Wisc.Forest.Flel.Util">
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Edu.Wisc.Forest.Flel.Util.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Edu.Wisc.Forest.Flel.Util.dll</HintPath>
     </Reference>
     <Reference Include="gdal_csharp">
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\gdal_csharp.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\gdal_csharp.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Console-6.0">
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\Landis.Console-6.0.exe</HintPath>
+    <Reference Include="Landis.Core">
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Landis.Core, Version=6.0.5290.28864, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Landis.Core.Implementation, Version=6.0.5290.28864, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.Implementation.dll</HintPath>
+    <Reference Include="Landis.Core.Implementation">
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.Core.Implementation.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Extensions.Dataset">
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Extensions.Dataset.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\extensions\Landis.Extensions.Dataset.dll</HintPath>
     </Reference>
     <Reference Include="Landis.Landscapes">
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.Landscapes.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.Landscapes.dll</HintPath>
     </Reference>
     <Reference Include="Landis.RasterIO.Gdal">
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.RasterIO.Gdal.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.RasterIO.Gdal.dll</HintPath>
     </Reference>
     <Reference Include="Landis.SpatialModeling">
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.SpatialModeling.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\Landis.SpatialModeling.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\log4net.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files\LANDIS-II\v6\bin\6.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
