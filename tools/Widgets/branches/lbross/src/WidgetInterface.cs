@@ -100,7 +100,7 @@ namespace Widgets
 
         public ProgressBar CreateProgressMeter(int totalWorkUnits)
         {
-            return new ProgressBar((uint)totalWorkUnits, System.Console.Out);
+            return new ProgressBar((uint)totalWorkUnits, writer);
         }
 
     }

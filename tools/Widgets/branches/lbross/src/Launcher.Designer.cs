@@ -49,7 +49,7 @@
             // BtnClose
             // 
             this.BtnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnClose.Location = new System.Drawing.Point(650, 369);
+            this.BtnClose.Location = new System.Drawing.Point(697, 369);
             this.BtnClose.Name = "BtnClose";
             this.BtnClose.Size = new System.Drawing.Size(75, 23);
             this.BtnClose.TabIndex = 10;
@@ -59,8 +59,9 @@
             // 
             // BtnValidate
             // 
+            this.BtnValidate.Enabled = false;
             this.BtnValidate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnValidate.Location = new System.Drawing.Point(488, 369);
+            this.BtnValidate.Location = new System.Drawing.Point(535, 369);
             this.BtnValidate.Name = "BtnValidate";
             this.BtnValidate.Size = new System.Drawing.Size(75, 23);
             this.BtnValidate.TabIndex = 9;
@@ -70,7 +71,7 @@
             // BtnRun
             // 
             this.BtnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnRun.Location = new System.Drawing.Point(569, 369);
+            this.BtnRun.Location = new System.Drawing.Point(616, 369);
             this.BtnRun.Name = "BtnRun";
             this.BtnRun.Size = new System.Drawing.Size(75, 23);
             this.BtnRun.TabIndex = 8;
@@ -81,7 +82,7 @@
             // BtnFile
             // 
             this.BtnFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnFile.Location = new System.Drawing.Point(650, 68);
+            this.BtnFile.Location = new System.Drawing.Point(693, 68);
             this.BtnFile.Name = "BtnFile";
             this.BtnFile.Size = new System.Drawing.Size(79, 23);
             this.BtnFile.TabIndex = 12;
@@ -95,7 +96,7 @@
             this.txtFilePath.Location = new System.Drawing.Point(106, 67);
             this.txtFilePath.Name = "txtFilePath";
             this.txtFilePath.ReadOnly = true;
-            this.txtFilePath.Size = new System.Drawing.Size(538, 22);
+            this.txtFilePath.Size = new System.Drawing.Size(581, 22);
             this.txtFilePath.TabIndex = 11;
             this.txtFilePath.Text = "C:\\Docs\\Lesley\\Landis\\data\\age-only-succession\\scenario.txt";
             // 
@@ -131,7 +132,7 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(7, 68);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(97, 16);
+            this.label2.Size = new System.Drawing.Size(95, 16);
             this.label2.TabIndex = 15;
             this.label2.Text = "Scenario file";
             // 
@@ -160,11 +161,12 @@
             // 
             // TxtBoxStatus
             // 
+            this.TxtBoxStatus.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.TxtBoxStatus.Location = new System.Drawing.Point(10, 109);
             this.TxtBoxStatus.Multiline = true;
             this.TxtBoxStatus.Name = "TxtBoxStatus";
             this.TxtBoxStatus.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.TxtBoxStatus.Size = new System.Drawing.Size(421, 249);
+            this.TxtBoxStatus.Size = new System.Drawing.Size(475, 249);
             this.TxtBoxStatus.TabIndex = 18;
             this.TxtBoxStatus.Text = "Ready ...";
             // 
@@ -174,14 +176,14 @@
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(7, 90);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(105, 16);
+            this.label4.Size = new System.Drawing.Size(102, 16);
             this.label4.TabIndex = 19;
             this.label4.Text = "Current status";
             // 
             // pictureBox1
             // 
             this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(448, 109);
+            this.pictureBox1.Location = new System.Drawing.Point(491, 109);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(281, 249);
             this.pictureBox1.TabIndex = 20;
@@ -191,7 +193,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(737, 395);
+            this.ClientSize = new System.Drawing.Size(780, 395);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.TxtBoxStatus);
