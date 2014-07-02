@@ -40,13 +40,24 @@ namespace Widgets
             WidgetInterface wi = new WidgetInterface();
             // Set text writer in WidgetInterface
             wi.TextWriter = _writer;
+            // Clear the textBox
+            TxtBoxStatus.Text = "";
+
+            // If the scenario path is bad print to the console and exit the sub
+            if (!File.Exists(txtFilePath.Text))
+            {
+                TxtBoxStatus.ForeColor = Color.Red;
+                string errorMessage = "The scenario file you specified is not valid.\r\n";
+                errorMessage = errorMessage + "Make sure you have write access to the working directory";
+                wi.WriteLine(errorMessage);
+                return;
+            }
 
             string workingDirectory = Path.GetDirectoryName(txtFilePath.Text);
             try
             {
                 //Reset the textbox color to black
                 TxtBoxStatus.ForeColor = Color.Black;
-                TxtBoxStatus.Text = "";
                 
                 // The log4net section in the application's configuration file
                 // requires the environment variable WORKING_DIR be set to the
