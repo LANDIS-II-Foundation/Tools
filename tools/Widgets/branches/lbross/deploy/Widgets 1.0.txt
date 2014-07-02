@@ -1,0 +1,10 @@
+LandisData   Extension
+
+Name         "Widgets"
+Version      1.0
+Type         gui
+Assembly     Widgets.exe
+Class        Widgets.exe
+Description  "UI Widgets for LANDIS"
+UserGuide    "Not available"
+CoreVersion  6.0
