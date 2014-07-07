@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Widgets
 {
-    class LauncherUtil
+    public class LauncherUtil
     {
 
         public static string GetAppSetting(string settingName)
