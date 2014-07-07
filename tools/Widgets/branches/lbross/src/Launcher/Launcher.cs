@@ -8,9 +8,10 @@ using System.IO;
 using System.Windows.Forms;
 using Landis.RasterIO.Gdal;
 using Landis.SpatialModeling;
+using Widgets;
 
 
-namespace Widgets
+namespace Launcher
 {
     public partial class Launcher : Form
     {
