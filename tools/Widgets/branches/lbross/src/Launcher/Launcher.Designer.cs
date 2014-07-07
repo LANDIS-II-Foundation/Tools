@@ -1,4 +1,4 @@
-﻿namespace Widgets
+﻿namespace Launcher
 {
     partial class Launcher
     {
