@@ -165,6 +165,7 @@
             this.TxtBoxStatus.Location = new System.Drawing.Point(10, 109);
             this.TxtBoxStatus.Multiline = true;
             this.TxtBoxStatus.Name = "TxtBoxStatus";
+            this.TxtBoxStatus.ReadOnly = true;
             this.TxtBoxStatus.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.TxtBoxStatus.Size = new System.Drawing.Size(475, 249);
             this.TxtBoxStatus.TabIndex = 18;
@@ -207,8 +208,8 @@
             this.Controls.Add(this.BtnClose);
             this.Controls.Add(this.BtnValidate);
             this.Controls.Add(this.BtnRun);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Launcher";
-            this.ShowIcon = false;
             this.Text = "LANDIS-II Scenario Launcher";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

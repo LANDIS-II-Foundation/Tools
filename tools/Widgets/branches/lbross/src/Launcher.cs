@@ -23,8 +23,16 @@ namespace Widgets
 
             // Prepend system path with LANDIS GDAL folder so app can find the libraries
             string path = Environment.GetEnvironmentVariable(Constants.ENV_PATH);
-            string newPath = Constants.GDAL_FOLDER + ";" + path;
-            Environment.SetEnvironmentVariable(Constants.ENV_PATH, newPath);
+            string gdalFolder = LauncherUtil.GetAppSetting("gdal_folder");
+            if (gdalFolder != "")
+            {
+                string newPath = gdalFolder + ";" + path;
+                Environment.SetEnvironmentVariable(Constants.ENV_PATH, newPath);
+            }
+            else
+            {
+                Console.WriteLine("unable to locate gdalFolder in config file");
+            }
 
             // Instantiate text writer
             _writer = new TextBoxStreamWriter(TxtBoxStatus);
@@ -44,6 +52,8 @@ namespace Widgets
             TxtBoxStatus.Text = "";
 
             // If the scenario path is bad print to the console and exit the sub
+           // @ToDo: Make sure user has write access to this directory
+            //@ToDo: Take out default value for txtFilePath.Text
             if (!File.Exists(txtFilePath.Text))
             {
                 TxtBoxStatus.ForeColor = Color.Red;
@@ -116,9 +126,10 @@ namespace Widgets
 
         private void BtnFile_Click(object sender, EventArgs e)
         {
+
             openFD.Title = "Scenario file";
             // @ToDo: Where to set the initial directory?
-            openFD.InitialDirectory = "C:";
+            //openFD.InitialDirectory = parentDir.FullName + "\\examples";
             openFD.FileName = "";
             openFD.Filter = "Text|*.txt";
             openFD.ShowDialog();
