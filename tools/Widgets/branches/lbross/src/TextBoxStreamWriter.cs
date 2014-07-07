@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Widgets
 {
-    class TextBoxStreamWriter : TextWriter
+    public class TextBoxStreamWriter : TextWriter
     //http://saezndaree.wordpress.com/2009/03/29/how-to-redirect-the-consoles-output-to-a-textbox-in-c/
     {
         TextBox _output = null;
