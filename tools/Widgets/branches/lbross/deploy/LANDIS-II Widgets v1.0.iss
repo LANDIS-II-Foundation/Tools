@@ -13,10 +13,7 @@
 
 AppName=LANDIS-II {#ExtensionName} v{#Version}{#ReleaseForAppName}
 AppVerName=LANDIS-II {#ExtensionName} v{#Version}{#ReleaseForAppVerName}
-
-#ifdef Organization
-AppPublisher={#Organization}
-#endif
+AppPublisher=Portland State University
 
 DefaultDirName={#LandisInstallDir}\v{#CoreMajorVersion}
 UsePreviousAppDir=no
@@ -42,10 +39,17 @@ SetupIconFile=.\icons\Tree.ico
 UninstallDisplayIcon=.\icons\Tree.ico
 
 [Files]
-; Install executable
+; Install Widgets .dll
 Source: ..\build\{#ExtensionAssembly}; DestDir: {app}\bin
+; Install Launcher executable
+Source: ..\build\Launcher.exe; DestDir: {app}\bin
 ; Install configuration file
-Source: ..\build\Widgets.exe.config; DestDir: {app}\bin
+Source: ..\build\Launcher.exe.config; DestDir: {app}\bin
+; Install Replicator executable
+Source: ..\build\Replicator.exe; DestDir: {app}\bin
+; Install configuration file
+Source: ..\build\Replicator.exe.config; DestDir: {app}\bin
+
 
 ; Install Files and Necessary Libraries
 ;Source: ..\build\gdal_csharp.dll; DestDir: {app}\bin Flags: uninsneveruninstall replacesameversion
@@ -55,8 +59,8 @@ Source: .\icons\rocket2.ico; DestDir: {app}\icons
 Source: .\icons\replicator.ico; DestDir: {app}\icons
 
 [Icons]
-Name: {group}\Widgets\Launcher;     Filename: {app}\bin\Widgets.exe;  IconFilename: "{app}\icons\rocket2.ico"
-Name: {group}\Widgets\Replicator;   Filename: {app}\bin\Widgets.exe;  IconFilename: "{app}\icons\replicator.ico"
+Name: {group}\Widgets\Launcher;     Filename: {app}\bin\Launcher.exe;  IconFilename: "{app}\icons\rocket2.ico"
+Name: {group}\Widgets\Replicator;   Filename: {app}\bin\Replicator.exe;  IconFilename: "{app}\icons\replicator.ico"
 Name: {group}\Uninstall\Widgets {#VersionRelease};   Filename: {uninstallexe}; Parameters: "/log";
 
 [Code]

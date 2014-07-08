@@ -2,9 +2,9 @@ LandisData   Extension
 
 Name         "Widgets"
 Version      1.0
-Type         gui
-Assembly     Widgets.exe
-Class        Widgets.exe
-Description  "UI Widgets for LANDIS"
+Type         Widgets
+Assembly     Widgets.dll
+Class        Widgets.dll
+Description  "Widgets class library for LANDIS-II"
 UserGuide    "Not available"
 CoreVersion  6.0
