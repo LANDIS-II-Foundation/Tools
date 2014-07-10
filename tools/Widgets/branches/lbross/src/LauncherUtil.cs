@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using System.IO;
 
 namespace Widgets
 {
@@ -46,6 +47,51 @@ namespace Widgets
 
              }
             return string.Empty;
+        }
+
+        public static Boolean HasWriteAccess(string directory)
+        {
+            try
+            {
+                string filename = directory + "\\test.txt";
+                using (FileStream fstream = new FileStream(filename, FileMode.Create))
+                using (TextWriter writer = new StreamWriter(fstream))
+                {
+                    writer.WriteLine("sometext");
+                }
+                File.Delete(filename);
+                return true;
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                //No permission. 
+                //Either throw an exception so this can be handled by a calling function
+                //or inform the user that they do not have permission to write to the folder and return.
+                return false;
+            }
+        }
+
+        public static Boolean LandisLogExists(string directory)
+        {
+            try
+            {
+                string logName = GetAppSetting("landis_log");
+                string filename = directory + "\\" + logName;
+                if (File.Exists(filename))
+                {
+                    // Make sure file isn't zero length
+                    if (new FileInfo(filename).Length > 0)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+                // An error occured when trying to open the log
+                return false;
+            }
         }
     }
 }
