@@ -33,6 +33,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Replicator));
             this.lblScenarioFile = new System.Windows.Forms.Label();
             this.BtnFile = new System.Windows.Forms.Button();
@@ -43,13 +44,15 @@
             this.label3 = new System.Windows.Forms.Label();
             this.BtnSave = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.BtnClose = new System.Windows.Forms.Button();
+            this.BtnValidate = new System.Windows.Forms.Button();
+            this.BtnRun = new System.Windows.Forms.Button();
             this.ScenarioFile = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.HideButton = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.BtnClose = new System.Windows.Forms.Button();
-            this.BtnValidate = new System.Windows.Forms.Button();
-            this.BtnRun = new System.Windows.Forms.Button();
+            this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.openFD = new System.Windows.Forms.OpenFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -73,6 +76,7 @@
             this.BtnFile.TabIndex = 17;
             this.BtnFile.Text = "Browse ...";
             this.BtnFile.UseVisualStyleBackColor = true;
+            this.BtnFile.Click += new System.EventHandler(this.BtnFile_Click);
             // 
             // txtFilePath
             // 
@@ -159,56 +163,19 @@
             this.ScenarioFile,
             this.ColStatus,
             this.HideButton,
-            this.Edit});
+            this.Edit,
+            this.Delete});
             this.dataGridView1.Location = new System.Drawing.Point(12, 144);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 30;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(762, 209);
+            this.dataGridView1.Size = new System.Drawing.Size(762, 208);
             this.dataGridView1.StandardTab = true;
             this.dataGridView1.TabIndex = 24;
             this.dataGridView1.TabStop = false;
             this.dataGridView1.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dataGridView1__CellPainting);
-            // 
-            // ScenarioFile
-            // 
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ScenarioFile.DefaultCellStyle = dataGridViewCellStyle3;
-            this.ScenarioFile.HeaderText = "Scenario files";
-            this.ScenarioFile.Name = "ScenarioFile";
-            this.ScenarioFile.ReadOnly = true;
-            this.ScenarioFile.Width = 450;
-            // 
-            // ColStatus
-            // 
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ColStatus.DefaultCellStyle = dataGridViewCellStyle4;
-            this.ColStatus.HeaderText = "Status";
-            this.ColStatus.Name = "ColStatus";
-            this.ColStatus.ReadOnly = true;
-            this.ColStatus.Width = 165;
-            // 
-            // HideButton
-            // 
-            this.HideButton.HeaderText = "Hide Button";
-            this.HideButton.Name = "HideButton";
-            this.HideButton.ReadOnly = true;
-            this.HideButton.Visible = false;
-            // 
-            // Edit
-            // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(3);
-            this.Edit.DefaultCellStyle = dataGridViewCellStyle5;
-            this.Edit.HeaderText = "Edit";
-            this.Edit.Name = "Edit";
-            this.Edit.ReadOnly = true;
-            this.Edit.Text = "Edit";
-            this.Edit.UseColumnTextForButtonValue = true;
-            this.Edit.Width = 125;
             // 
             // BtnClose
             // 
@@ -242,6 +209,60 @@
             this.BtnRun.Text = "Run";
             this.BtnRun.UseVisualStyleBackColor = true;
             this.BtnRun.Click += new System.EventHandler(this.BtnRun_Click);
+            // 
+            // ScenarioFile
+            // 
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ScenarioFile.DefaultCellStyle = dataGridViewCellStyle3;
+            this.ScenarioFile.HeaderText = "Scenario files";
+            this.ScenarioFile.Name = "ScenarioFile";
+            this.ScenarioFile.ReadOnly = true;
+            this.ScenarioFile.Width = 435;
+            // 
+            // ColStatus
+            // 
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ColStatus.DefaultCellStyle = dataGridViewCellStyle4;
+            this.ColStatus.HeaderText = "Status";
+            this.ColStatus.Name = "ColStatus";
+            this.ColStatus.ReadOnly = true;
+            // 
+            // HideButton
+            // 
+            this.HideButton.HeaderText = "Hide Button";
+            this.HideButton.Name = "HideButton";
+            this.HideButton.ReadOnly = true;
+            this.HideButton.Visible = false;
+            // 
+            // Edit
+            // 
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(3);
+            this.Edit.DefaultCellStyle = dataGridViewCellStyle5;
+            this.Edit.HeaderText = "Edit";
+            this.Edit.Name = "Edit";
+            this.Edit.ReadOnly = true;
+            this.Edit.Text = "Edit";
+            this.Edit.UseColumnTextForButtonValue = true;
+            // 
+            // Delete
+            // 
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.Padding = new System.Windows.Forms.Padding(3);
+            this.Delete.DefaultCellStyle = dataGridViewCellStyle6;
+            this.Delete.HeaderText = "Delete";
+            this.Delete.Name = "Delete";
+            this.Delete.ReadOnly = true;
+            this.Delete.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Delete.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Delete.Text = "Delete";
+            this.Delete.UseColumnTextForButtonValue = true;
+            // 
+            // openFD
+            // 
+            this.openFD.FileName = "openFileDialog1";
             // 
             // Replicator
             // 
@@ -289,5 +310,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn HideButton;
         private System.Windows.Forms.DataGridViewButtonColumn Edit;
+        private System.Windows.Forms.DataGridViewButtonColumn Delete;
+        private System.Windows.Forms.OpenFileDialog openFD;
     }
 }

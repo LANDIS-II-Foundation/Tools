@@ -44,8 +44,12 @@ namespace Replicator
         // Hides the button if we don't want to show it
         private void dataGridView1__CellPainting(object sender, System.Windows.Forms.DataGridViewCellPaintingEventArgs e)
          {
-                if (this.dataGridView1.Columns["Edit"].Index ==
-                   e.ColumnIndex && e.RowIndex >= 0)
+            List<int> indexes = new List<int>();
+            indexes.Add(this.dataGridView1.Columns["Edit"].Index);
+            indexes.Add(this.dataGridView1.Columns["Delete"].Index);
+            
+            if (indexes.Contains(e.ColumnIndex) &&
+                   e.RowIndex >= 0)
                 {
 
                     Boolean hideButton = Convert.ToBoolean(dataGridView1[dataGridView1.Columns["HideButton"].Index, e.RowIndex].Value);
@@ -94,6 +98,19 @@ namespace Replicator
         {
             ReplicatorStatus statusForm = new ReplicatorStatus();
             statusForm.ShowDialog();
+        }
+
+        private void BtnFile_Click(object sender, EventArgs e)
+        {
+            openFD.Title = "Scenario file";
+            // @ToDo: Where to set the initial directory?
+            //openFD.InitialDirectory = parentDir.FullName + "\\examples";
+            openFD.FileName = "";
+            openFD.Filter = "Text|*.txt";
+            openFD.ShowDialog();
+
+            string filePath = openFD.FileName;
+            txtFilePath.Text = filePath;
         }
 
 
