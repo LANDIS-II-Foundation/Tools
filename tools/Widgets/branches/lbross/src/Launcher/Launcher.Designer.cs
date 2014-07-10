@@ -43,15 +43,16 @@
             this.TxtBoxStatus = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.BtnLogFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // BtnClose
             // 
             this.BtnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnClose.Location = new System.Drawing.Point(697, 369);
+            this.BtnClose.Location = new System.Drawing.Point(697, 367);
             this.BtnClose.Name = "BtnClose";
-            this.BtnClose.Size = new System.Drawing.Size(75, 23);
+            this.BtnClose.Size = new System.Drawing.Size(75, 25);
             this.BtnClose.TabIndex = 10;
             this.BtnClose.Text = "Close";
             this.BtnClose.UseVisualStyleBackColor = true;
@@ -61,19 +62,20 @@
             // 
             this.BtnValidate.Enabled = false;
             this.BtnValidate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnValidate.Location = new System.Drawing.Point(535, 369);
+            this.BtnValidate.Location = new System.Drawing.Point(454, 367);
             this.BtnValidate.Name = "BtnValidate";
-            this.BtnValidate.Size = new System.Drawing.Size(75, 23);
+            this.BtnValidate.Size = new System.Drawing.Size(75, 25);
             this.BtnValidate.TabIndex = 9;
             this.BtnValidate.Text = "Validate";
             this.BtnValidate.UseVisualStyleBackColor = true;
             // 
             // BtnRun
             // 
+            this.BtnRun.Enabled = false;
             this.BtnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnRun.Location = new System.Drawing.Point(616, 369);
+            this.BtnRun.Location = new System.Drawing.Point(616, 367);
             this.BtnRun.Name = "BtnRun";
-            this.BtnRun.Size = new System.Drawing.Size(75, 23);
+            this.BtnRun.Size = new System.Drawing.Size(75, 25);
             this.BtnRun.TabIndex = 8;
             this.BtnRun.Text = "Run";
             this.BtnRun.UseVisualStyleBackColor = true;
@@ -151,12 +153,12 @@
             // 
             this.lblWww.AutoSize = true;
             this.lblWww.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWww.Location = new System.Drawing.Point(165, 372);
+            this.lblWww.Location = new System.Drawing.Point(163, 372);
             this.lblWww.Name = "lblWww";
-            this.lblWww.Size = new System.Drawing.Size(250, 16);
+            this.lblWww.Size = new System.Drawing.Size(143, 16);
             this.lblWww.TabIndex = 17;
             this.lblWww.TabStop = true;
-            this.lblWww.Text = "http://sites.google.com/site/landismodel/";
+            this.lblWww.Text = "http://www.landis-ii.org/";
             this.lblWww.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblWww_LinkClicked);
             // 
             // TxtBoxStatus
@@ -190,11 +192,24 @@
             this.pictureBox1.TabIndex = 20;
             this.pictureBox1.TabStop = false;
             // 
+            // BtnLogFile
+            // 
+            this.BtnLogFile.Enabled = false;
+            this.BtnLogFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnLogFile.Location = new System.Drawing.Point(535, 367);
+            this.BtnLogFile.Name = "BtnLogFile";
+            this.BtnLogFile.Size = new System.Drawing.Size(75, 25);
+            this.BtnLogFile.TabIndex = 21;
+            this.BtnLogFile.Text = "Log File";
+            this.BtnLogFile.UseVisualStyleBackColor = true;
+            this.BtnLogFile.Click += new System.EventHandler(this.BtnLogFile_Click);
+            // 
             // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(780, 395);
+            this.Controls.Add(this.BtnLogFile);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.TxtBoxStatus);
@@ -233,6 +248,7 @@
         private System.Windows.Forms.TextBox TxtBoxStatus;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button BtnLogFile;
     }
 }
 

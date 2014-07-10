@@ -37,6 +37,10 @@ namespace Launcher
 
             // Instantiate text writer
             _writer = new TextBoxStreamWriter(TxtBoxStatus);
+
+            // Set the BackColor so that we can set the ForeColor to red below if there is an error
+            // This is an eccentricity with MS read-only textbox
+            TxtBoxStatus.BackColor = SystemColors.Control;
         }
 
         private void BtnClose_Click(object sender, EventArgs e)
@@ -52,21 +56,31 @@ namespace Launcher
             // Clear the textBox
             TxtBoxStatus.Text = "";
 
-            // If the scenario path is bad print to the console and exit the sub
-           // @ToDo: Make sure user has write access to this directory
             //@ToDo: Take out default value for txtFilePath.Text
+            // If the scenario path is bad print to the console and exit the sub
             if (!File.Exists(txtFilePath.Text))
             {
                 TxtBoxStatus.ForeColor = Color.Red;
                 string errorMessage = "The scenario file you specified is not valid.\r\n";
-                errorMessage = errorMessage + "Make sure you have write access to the working directory";
+                errorMessage = errorMessage + "Make sure you have write access to the working directory.";
                 wi.WriteLine(errorMessage);
                 return;
             }
 
+            //Make sure user has write access to working directory before proceeding
             string workingDirectory = Path.GetDirectoryName(txtFilePath.Text);
+            if (LauncherUtil.HasWriteAccess(workingDirectory) == false)
+            {
+                TxtBoxStatus.ForeColor = Color.Red;
+                wi.WriteLine("The working directory you selected is invalid. You cannot write to this directory.");
+                return;
+            }
+ 
             try
             {
+                //Disable buttons before starting processing
+                enableButtons(false);
+                
                 //Reset the textbox color to black
                 TxtBoxStatus.ForeColor = Color.Black;
                 
@@ -76,6 +90,7 @@ namespace Launcher
                 // This will be the folder containing the scenario .txt file
                 Environment.SetEnvironmentVariable(Constants.ENV_WORKING_DIR, workingDirectory);
                 log4net.Config.XmlConfigurator.Configure();
+
 
                 // Set the working directory for the Model
                 Directory.SetCurrentDirectory(workingDirectory);
@@ -90,8 +105,6 @@ namespace Launcher
                     release = string.Format(" ({0})", release);
                 wi.WriteLine("LANDIS-II {0}{1}", version, release);
 
-                // Get the installed Widgets version from the config file
-
                 //@ToDo: Is it okay to hard-code this path? If the widget runs from the LANDIS-II bin, shouldn't be needed
                 //Landis.Core.IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate();
                 string extFolder = Constants.EXTENSIONS_FOLDER + Constants.EXTENSIONS_XML;
@@ -100,26 +113,46 @@ namespace Launcher
                 Landis.Landscapes.LandscapeFactory landscapeFactory = new Landis.Landscapes.LandscapeFactory();
                 Landis.Model model = new Landis.Model(extensions, rasterFactory, landscapeFactory);
                 model.Run(txtFilePath.Text, wi);
-                MessageBox.Show("The end!");
+                enableButtons(true);
+                MessageBox.Show("Model run is complete");
             }
             catch (Exception exc)
             {
+                //Enable buttons so user can recover from error
+                enableButtons(true);
                 //Change the text color to red to alert the user
                 TxtBoxStatus.ForeColor = Color.Red;
-                //Print a warning message
-                string strError = "\r\nA program error occurred.\r\nThe error log is available at " + workingDirectory + Constants.ERROR_LOG;
-                wi.WriteLine(strError);
-                using (TextWriter writer = File.CreateText(workingDirectory + Constants.ERROR_LOG))
+                Boolean logAvailable = true;
+                // Throw this in a try-catch in case the user doesn't have access to write the log
+                try
                 {
-                    writer.WriteLine("Internal error occurred within the program:");
-                    writer.WriteLine("  {0}", exc.Message);
-                    if (exc.InnerException != null)
+                    using (TextWriter writer = File.CreateText(workingDirectory + Constants.ERROR_LOG))
                     {
-                        writer.WriteLine("  {0}", exc.InnerException.Message);
+                        writer.WriteLine("Internal error occurred within the program:");
+                        writer.WriteLine("  {0}", exc.Message);
+                        if (exc.InnerException != null)
+                        {
+                            writer.WriteLine("  {0}", exc.InnerException.Message);
+                        }
+                        writer.WriteLine();
+                        writer.WriteLine("Stack trace:");
+                        writer.WriteLine(exc.StackTrace);
                     }
-                    writer.WriteLine();
-                    writer.WriteLine("Stack trace:");
-                    writer.WriteLine(exc.StackTrace);
+                }
+                catch (Exception exc2)
+                {
+                    logAvailable = false;
+                    string strError2 = "\r\nAn error occurred while writing the error log.\r\n" +
+                                        "The most likely cause is that you do not have permissions to the working directory";
+                    wi.WriteLine(strError2);
+                    Console.WriteLine("Launcher exception: " + exc2);
+                }
+                //Print an error message
+                if (logAvailable == true)
+                {
+                    string strError = "\r\nA program error occurred.\r\nThe error log is available at " + workingDirectory + Constants.ERROR_LOG;
+                    wi.WriteLine(strError);
+
                 }
             }
 
@@ -137,6 +170,11 @@ namespace Launcher
 
             string filePath = openFD.FileName;
             txtFilePath.Text = filePath;
+            if (txtFilePath.Text.Length > 0)
+            {
+                BtnRun.Enabled = true;
+                enableLogButton();
+            }
         }
 
         private void lblWww_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -146,6 +184,40 @@ namespace Launcher
 
             // Navigate to a URL.
             System.Diagnostics.Process.Start(lblWww.Text);
+        }
+
+        private void enableButtons(Boolean enableButtons)
+        {
+            BtnFile.Enabled = enableButtons;
+            BtnRun.Enabled = enableButtons;
+            if (enableButtons == false)
+            {
+                BtnLogFile.Enabled = enableButtons;
+            }
+            else
+            {
+                enableLogButton();
+            }
+            //@ToDo: Enable when validate function is enabled
+            //BtnValidate.Enabled = enableButtons;
+        }
+
+        private void enableLogButton()
+        {
+            if (LauncherUtil.LandisLogExists(Path.GetDirectoryName(txtFilePath.Text)) == true)
+            {
+                BtnLogFile.Enabled = true;
+            }
+            else {
+                BtnLogFile.Enabled = false;
+            }
+        }
+
+        private void BtnLogFile_Click(object sender, EventArgs e)
+        {
+            string logName = LauncherUtil.GetAppSetting("landis_log");
+            string fullPath = Path.GetDirectoryName(txtFilePath.Text) + "\\" + logName;
+            System.Diagnostics.Process.Start(fullPath);
         }
 
     }
