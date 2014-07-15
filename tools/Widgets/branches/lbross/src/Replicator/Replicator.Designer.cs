@@ -40,20 +40,21 @@
             this.txtFilePath = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.lblLandis = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.numRuns = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.BtnSave = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.BtnClose = new System.Windows.Forms.Button();
-            this.BtnValidate = new System.Windows.Forms.Button();
-            this.BtnRun = new System.Windows.Forms.Button();
             this.ScenarioFile = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.HideButton = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Delete = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.BtnClose = new System.Windows.Forms.Button();
+            this.BtnValidate = new System.Windows.Forms.Button();
+            this.BtnRun = new System.Windows.Forms.Button();
             this.openFD = new System.Windows.Forms.OpenFileDialog();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.BtnClear = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.numRuns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -70,7 +71,7 @@
             // BtnFile
             // 
             this.BtnFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnFile.Location = new System.Drawing.Point(452, 99);
+            this.BtnFile.Location = new System.Drawing.Point(475, 99);
             this.BtnFile.Name = "BtnFile";
             this.BtnFile.Size = new System.Drawing.Size(79, 23);
             this.BtnFile.TabIndex = 17;
@@ -84,7 +85,7 @@
             this.txtFilePath.Location = new System.Drawing.Point(14, 100);
             this.txtFilePath.Name = "txtFilePath";
             this.txtFilePath.ReadOnly = true;
-            this.txtFilePath.Size = new System.Drawing.Size(432, 22);
+            this.txtFilePath.Size = new System.Drawing.Size(457, 22);
             this.txtFilePath.TabIndex = 2;
             this.txtFilePath.TabStop = false;
             // 
@@ -110,14 +111,14 @@
             this.lblLandis.TabIndex = 19;
             this.lblLandis.Text = "LANDIS-II";
             // 
-            // numericUpDown1
+            // numRuns
             // 
-            this.numericUpDown1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numericUpDown1.Location = new System.Drawing.Point(550, 99);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(80, 22);
-            this.numericUpDown1.TabIndex = 21;
-            this.numericUpDown1.Value = new decimal(new int[] {
+            this.numRuns.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.numRuns.Location = new System.Drawing.Point(583, 101);
+            this.numRuns.Name = "numRuns";
+            this.numRuns.Size = new System.Drawing.Size(80, 22);
+            this.numRuns.TabIndex = 21;
+            this.numRuns.Value = new decimal(new int[] {
             1,
             0,
             0,
@@ -127,7 +128,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(535, 78);
+            this.label3.Location = new System.Drawing.Point(563, 78);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(112, 16);
             this.label3.TabIndex = 22;
@@ -135,20 +136,23 @@
             // 
             // BtnSave
             // 
+            this.BtnSave.Enabled = false;
             this.BtnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnSave.Location = new System.Drawing.Point(650, 100);
+            this.BtnSave.Location = new System.Drawing.Point(669, 100);
             this.BtnSave.Name = "BtnSave";
             this.BtnSave.Size = new System.Drawing.Size(79, 23);
             this.BtnSave.TabIndex = 23;
             this.BtnSave.Text = "Save";
             this.BtnSave.UseVisualStyleBackColor = true;
+            this.BtnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
             // dataGridView1
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ControlLight;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
@@ -169,61 +173,33 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.RowTemplate.Height = 30;
+            this.dataGridView1.RowTemplate.Height = 25;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(762, 208);
+            this.dataGridView1.Size = new System.Drawing.Size(737, 287);
             this.dataGridView1.StandardTab = true;
             this.dataGridView1.TabIndex = 24;
             this.dataGridView1.TabStop = false;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dataGridView1__CellPainting);
-            // 
-            // BtnClose
-            // 
-            this.BtnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnClose.Location = new System.Drawing.Point(699, 369);
-            this.BtnClose.Name = "BtnClose";
-            this.BtnClose.Size = new System.Drawing.Size(75, 23);
-            this.BtnClose.TabIndex = 27;
-            this.BtnClose.Text = "Close";
-            this.BtnClose.UseVisualStyleBackColor = true;
-            this.BtnClose.Click += new System.EventHandler(this.BtnClose_Click);
-            // 
-            // BtnValidate
-            // 
-            this.BtnValidate.Enabled = false;
-            this.BtnValidate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnValidate.Location = new System.Drawing.Point(537, 369);
-            this.BtnValidate.Name = "BtnValidate";
-            this.BtnValidate.Size = new System.Drawing.Size(75, 23);
-            this.BtnValidate.TabIndex = 26;
-            this.BtnValidate.Text = "Validate";
-            this.BtnValidate.UseVisualStyleBackColor = true;
-            // 
-            // BtnRun
-            // 
-            this.BtnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnRun.Location = new System.Drawing.Point(618, 369);
-            this.BtnRun.Name = "BtnRun";
-            this.BtnRun.Size = new System.Drawing.Size(75, 23);
-            this.BtnRun.TabIndex = 25;
-            this.BtnRun.Text = "Run";
-            this.BtnRun.UseVisualStyleBackColor = true;
-            this.BtnRun.Click += new System.EventHandler(this.BtnRun_Click);
             // 
             // ScenarioFile
             // 
             dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
             this.ScenarioFile.DefaultCellStyle = dataGridViewCellStyle3;
             this.ScenarioFile.HeaderText = "Scenario files";
+            this.ScenarioFile.MinimumWidth = 435;
             this.ScenarioFile.Name = "ScenarioFile";
             this.ScenarioFile.ReadOnly = true;
             this.ScenarioFile.Width = 435;
             // 
             // ColStatus
             // 
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ColStatus.DefaultCellStyle = dataGridViewCellStyle4;
             this.ColStatus.HeaderText = "Status";
+            this.ColStatus.MinimumWidth = 100;
             this.ColStatus.Name = "ColStatus";
             this.ColStatus.ReadOnly = true;
             // 
@@ -241,6 +217,7 @@
             dataGridViewCellStyle5.Padding = new System.Windows.Forms.Padding(3);
             this.Edit.DefaultCellStyle = dataGridViewCellStyle5;
             this.Edit.HeaderText = "Edit";
+            this.Edit.MinimumWidth = 100;
             this.Edit.Name = "Edit";
             this.Edit.ReadOnly = true;
             this.Edit.Text = "Edit";
@@ -253,6 +230,7 @@
             dataGridViewCellStyle6.Padding = new System.Windows.Forms.Padding(3);
             this.Delete.DefaultCellStyle = dataGridViewCellStyle6;
             this.Delete.HeaderText = "Delete";
+            this.Delete.MinimumWidth = 100;
             this.Delete.Name = "Delete";
             this.Delete.ReadOnly = true;
             this.Delete.Resizable = System.Windows.Forms.DataGridViewTriState.True;
@@ -260,22 +238,68 @@
             this.Delete.Text = "Delete";
             this.Delete.UseColumnTextForButtonValue = true;
             // 
+            // BtnClose
+            // 
+            this.BtnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnClose.Location = new System.Drawing.Point(674, 437);
+            this.BtnClose.Name = "BtnClose";
+            this.BtnClose.Size = new System.Drawing.Size(75, 23);
+            this.BtnClose.TabIndex = 27;
+            this.BtnClose.Text = "Close";
+            this.BtnClose.UseVisualStyleBackColor = true;
+            this.BtnClose.Click += new System.EventHandler(this.BtnClose_Click);
+            // 
+            // BtnValidate
+            // 
+            this.BtnValidate.Enabled = false;
+            this.BtnValidate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnValidate.Location = new System.Drawing.Point(431, 437);
+            this.BtnValidate.Name = "BtnValidate";
+            this.BtnValidate.Size = new System.Drawing.Size(75, 23);
+            this.BtnValidate.TabIndex = 26;
+            this.BtnValidate.Text = "Validate";
+            this.BtnValidate.UseVisualStyleBackColor = true;
+            // 
+            // BtnRun
+            // 
+            this.BtnRun.Enabled = false;
+            this.BtnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnRun.Location = new System.Drawing.Point(593, 437);
+            this.BtnRun.Name = "BtnRun";
+            this.BtnRun.Size = new System.Drawing.Size(75, 23);
+            this.BtnRun.TabIndex = 25;
+            this.BtnRun.Text = "Run";
+            this.BtnRun.UseVisualStyleBackColor = true;
+            this.BtnRun.Click += new System.EventHandler(this.BtnRun_Click);
+            // 
             // openFD
             // 
             this.openFD.FileName = "openFileDialog1";
+            // 
+            // BtnClear
+            // 
+            this.BtnClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BtnClear.Location = new System.Drawing.Point(512, 437);
+            this.BtnClear.Name = "BtnClear";
+            this.BtnClear.Size = new System.Drawing.Size(75, 23);
+            this.BtnClear.TabIndex = 28;
+            this.BtnClear.Text = "Clear";
+            this.BtnClear.UseVisualStyleBackColor = true;
+            this.BtnClear.Click += new System.EventHandler(this.BtnClear_Click);
             // 
             // Replicator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(780, 395);
+            this.ClientSize = new System.Drawing.Size(757, 472);
+            this.Controls.Add(this.BtnClear);
             this.Controls.Add(this.BtnClose);
             this.Controls.Add(this.BtnValidate);
             this.Controls.Add(this.BtnRun);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.BtnSave);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.numRuns);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblLandis);
             this.Controls.Add(this.lblScenarioFile);
@@ -284,8 +308,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Replicator";
             this.Text = "LANDIS-II Scenario Replicator";
-            this.Load += new System.EventHandler(this.Replicator_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numRuns)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -299,18 +322,19 @@
         private System.Windows.Forms.TextBox txtFilePath;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label lblLandis;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown numRuns;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button BtnSave;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button BtnClose;
         private System.Windows.Forms.Button BtnValidate;
         private System.Windows.Forms.Button BtnRun;
+        private System.Windows.Forms.OpenFileDialog openFD;
         private System.Windows.Forms.DataGridViewTextBoxColumn ScenarioFile;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn HideButton;
         private System.Windows.Forms.DataGridViewButtonColumn Edit;
         private System.Windows.Forms.DataGridViewButtonColumn Delete;
-        private System.Windows.Forms.OpenFileDialog openFD;
+        private System.Windows.Forms.Button BtnClear;
     }
 }

@@ -16,6 +16,7 @@ namespace Replicator
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Replicator());
+            //Application.Run(new ListView());
         }
     }
 }
