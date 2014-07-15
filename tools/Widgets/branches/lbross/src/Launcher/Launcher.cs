@@ -24,7 +24,7 @@ namespace Launcher
 
             // Prepend system path with LANDIS GDAL folder so app can find the libraries
             string path = Environment.GetEnvironmentVariable(Constants.ENV_PATH);
-            string gdalFolder = LauncherUtil.GetAppSetting("gdal_folder");
+            string gdalFolder = WidgetsUtil.GetAppSetting("gdal_folder");
             if (gdalFolder != "")
             {
                 string newPath = gdalFolder + ";" + path;
@@ -57,22 +57,15 @@ namespace Launcher
             TxtBoxStatus.Text = "";
 
             //@ToDo: Take out default value for txtFilePath.Text
+            string workingDirectory = Path.GetDirectoryName(txtFilePath.Text);
             // If the scenario path is bad print to the console and exit the sub
+            // Check for the file right before running in case it was moved
             if (!File.Exists(txtFilePath.Text))
             {
                 TxtBoxStatus.ForeColor = Color.Red;
                 string errorMessage = "The scenario file you specified is not valid.\r\n";
                 errorMessage = errorMessage + "Make sure you have write access to the working directory.";
                 wi.WriteLine(errorMessage);
-                return;
-            }
-
-            //Make sure user has write access to working directory before proceeding
-            string workingDirectory = Path.GetDirectoryName(txtFilePath.Text);
-            if (LauncherUtil.HasWriteAccess(workingDirectory) == false)
-            {
-                TxtBoxStatus.ForeColor = Color.Red;
-                wi.WriteLine("The working directory you selected is invalid. You cannot write to this directory.");
                 return;
             }
  
@@ -88,6 +81,7 @@ namespace Launcher
                 // requires the environment variable WORKING_DIR be set to the
                 // current working directory.
                 // This will be the folder containing the scenario .txt file
+
                 Environment.SetEnvironmentVariable(Constants.ENV_WORKING_DIR, workingDirectory);
                 log4net.Config.XmlConfigurator.Configure();
 
@@ -97,10 +91,10 @@ namespace Launcher
 
                 // Get the installed LANDIS version from the console
                 //string version = Landis.App.GetAppSetting("version");
-                string version = LauncherUtil.GetAssemblySetting("version");
+                string version = WidgetsUtil.GetAssemblySetting("version");
                 if (version == "")
                     throw new Exception("The LANDIS application setting \"version\" is empty or blank");
-                string release = LauncherUtil.GetAssemblySetting("release");
+                string release = WidgetsUtil.GetAssemblySetting("release");
                 if (release != "")
                     release = string.Format(" ({0})", release);
                 wi.WriteLine("LANDIS-II {0}{1}", version, release);
@@ -169,11 +163,26 @@ namespace Launcher
             openFD.ShowDialog();
 
             string filePath = openFD.FileName;
-            txtFilePath.Text = filePath;
-            if (txtFilePath.Text.Length > 0)
+
+            if (!String.IsNullOrEmpty(filePath))
             {
-                BtnRun.Enabled = true;
-                enableLogButton();
+                //Make sure user has write access to working directory before proceeding
+                string workingDirectory = Path.GetDirectoryName(filePath);
+                if (WidgetsUtil.HasWriteAccess(workingDirectory) == false)
+                {
+                    MessageBox.Show("The working directory you selected is invalid. You cannot write to this directory.",
+                        "Invalid directory", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                else
+                {
+                    txtFilePath.Text = filePath;
+                    if (txtFilePath.Text.Length > 0)
+                    {
+                        BtnRun.Enabled = true;
+                        enableLogButton();
+                    }
+                }
             }
         }
 
@@ -204,7 +213,7 @@ namespace Launcher
 
         private void enableLogButton()
         {
-            if (LauncherUtil.LandisLogExists(Path.GetDirectoryName(txtFilePath.Text)) == true)
+            if (WidgetsUtil.LandisLogExists(Path.GetDirectoryName(txtFilePath.Text)) == true)
             {
                 BtnLogFile.Enabled = true;
             }
@@ -215,7 +224,7 @@ namespace Launcher
 
         private void BtnLogFile_Click(object sender, EventArgs e)
         {
-            string logName = LauncherUtil.GetAppSetting("landis_log");
+            string logName = WidgetsUtil.GetAppSetting("landis_log");
             string fullPath = Path.GetDirectoryName(txtFilePath.Text) + "\\" + logName;
             System.Diagnostics.Process.Start(fullPath);
         }
