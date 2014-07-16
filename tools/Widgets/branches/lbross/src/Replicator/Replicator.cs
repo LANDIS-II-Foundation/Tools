@@ -17,10 +17,38 @@ namespace Replicator
     {
         SortedDictionary<string, int> m_scenDictionary;
         static string RUN_ = "\\run_";
+        static string STATUS_PENDING = "Pending";
+        static string STATUS_RUNNING = "Running";
+        static string STATUS_FAILED = "Finished";
+        static string STATUS_COMPLETE = "Complete";
+        // That's our custom to redirect console output to form
+        TextWriter _writer = null;
+
         
         public Replicator()
         {
             InitializeComponent();
+
+            // Prepend system path with LANDIS GDAL folder so app can find the libraries
+            string path = Environment.GetEnvironmentVariable(Constants.ENV_PATH);
+            string gdalFolder = WidgetsUtil.GetAppSetting("gdal_folder");
+            if (gdalFolder != "")
+            {
+                string newPath = gdalFolder + ";" + path;
+                Environment.SetEnvironmentVariable(Constants.ENV_PATH, newPath);
+            }
+            else
+            {
+                Console.WriteLine("unable to locate gdalFolder in config file");
+            }
+
+            // Instantiate text writer
+            _writer = new TextBoxStreamWriter(TxtBoxStatus);
+
+            // Set the BackColor so that we can set the ForeColor to red below if there is an error
+            // This is an eccentricity with MS read-only textbox
+            TxtBoxStatus.BackColor = SystemColors.Control;
+            
             //@ToDo: Don't prepopulate data after development is complete
             //SampleData();
         }
@@ -102,20 +130,29 @@ namespace Replicator
         private void BtnRun_Click(object sender, EventArgs e)
         {
             // Open the status window
-            ReplicatorStatus statusForm = new ReplicatorStatus();
-            statusForm.Owner = this;
+            //ReplicatorStatus statusForm = new ReplicatorStatus();
+            //statusForm.Owner = this;
             WidgetInterface wi = new WidgetInterface();
             // Set text writer in WidgetInterface
-            wi.TextWriter = statusForm.StatusTextWriter;
+            //wi.TextWriter = statusForm.StatusTextWriter;
+            wi.TextWriter = _writer;
             // clear the textbox
-            statusForm.TxtBoxStatus_Clear();
-            statusForm.Show(this);
+            //statusForm.TxtBoxStatus_Clear();
+            TxtBoxStatus.Text = "";
+            // calculate the position for the child form
+            //decimal YOffset = this.Height / 2;
+            //int posY = this.Location.Y + (int) YOffset;
+            //int posX = this.Location.X + 600;
+            //Point statusFormLocation = new Point(posX, posY);
+            //statusForm.Location = statusFormLocation;
+            //statusForm.StartPosition = FormStartPosition.Manual;
+            //statusForm.Show(this);
 
             //Disable buttons before starting processing
             enableButtons(false);
 
             //Reset the textbox color to black
-            statusForm.TxtBoxStatus_ForeColor(Color.Black);
+            //statusForm.TxtBoxStatus_ForeColor(Color.Black);
 
             //@ToDo: Is it okay to hard-code this path? If the widget runs from the LANDIS-II bin, shouldn't be needed
             //Landis.Core.IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate();
@@ -136,7 +173,8 @@ namespace Replicator
             catch (Exception exc)
             {
                 enableButtons(true);
-                statusForm.TxtBoxStatus_ForeColor(Color.Red);
+                //statusForm.TxtBoxStatus_ForeColor(Color.Red);
+                TxtBoxStatus.ForeColor = Color.Red;
                 string errorMessage = "An error occurred while trying to start the model.\r\n";
                 errorMessage = errorMessage + "Exception: " + exc.Message;
                 errorMessage = errorMessage + exc.StackTrace;
@@ -149,11 +187,27 @@ namespace Replicator
             {
                 string parentFolder = Path.GetDirectoryName(entry.Key);
                 string scenarioFile = Path.GetFileName(entry.Key);
+
+                // Delete any existing run_ subdirectories
+                DirectoryInfo dir = new DirectoryInfo(parentFolder);
+                DirectoryInfo[] dirs = dir.GetDirectories();
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    if (subdir.Name.IndexOf(RUN_.Trim('\\')) > -1)
+                    {
+                        subdir.Delete(true);
+                    }
+                }
+
                 // Add the child rows
                 for (int i = 1; i <= entry.Value; i++)
                 {
                     string runFolder = RUN_ + i;
                     string fullPath = parentFolder + runFolder;
+                    string scenarioFilePath = fullPath + "\\" + scenarioFile;
+                    UpdateStatus(scenarioFilePath, STATUS_RUNNING);
+
+                    // Create run_ subdirectories
                     wi.WriteLine("Creating new subdirectories for " + fullPath);
                     WidgetsUtil.DirectoryCopy(parentFolder, fullPath, RUN_.Trim('\\'));
                     // Delete the landis log and error log files from the children
@@ -164,10 +218,9 @@ namespace Replicator
 
                     // If the scenario path is bad print to the console and exit the sub
                     // Check for the file right before running in case it was moved
-                    string scenarioFilePath = fullPath + "\\" + scenarioFile;
                     if (!File.Exists(scenarioFilePath))
                     {
-                        statusForm.TxtBoxStatus_ForeColor(Color.Red);
+                        TxtBoxStatus.ForeColor = Color.Red;
                         string errorMessage = "The scenario file you specified is not valid.\r\n";
                         errorMessage = errorMessage + "Make sure you have write access to the working directory.";
                         wi.WriteLine(errorMessage);
@@ -197,15 +250,16 @@ namespace Replicator
                             release = string.Format(" ({0})", release);
                         wi.WriteLine("LANDIS-II {0}{1}", version, release);
 
-                        model.Run(fullPath, wi);
-
+                        model.Run(scenarioFilePath, wi);
+                        UpdateStatus(scenarioFilePath, STATUS_COMPLETE);
                     }
                     catch (Exception exc)
                     {
                         //Enable buttons so user can recover from error
                         enableButtons(true);
                         //Change the text color to red to alert the user
-                        statusForm.TxtBoxStatus_ForeColor(Color.Red);
+                        //statusForm.TxtBoxStatus_ForeColor(Color.Red);
+                        TxtBoxStatus.ForeColor = Color.Red;
                         Boolean logAvailable = true;
                         // Throw this in a try-catch in case the user doesn't have access to write the log
                         try
@@ -241,6 +295,7 @@ namespace Replicator
                     }
                 }
             }
+            enableButtons(true);
         }
 
         private void BtnFile_Click(object sender, EventArgs e)
@@ -267,7 +322,17 @@ namespace Replicator
                 }
                 else
                 {
-                    //@ToDo: Warn if subdirectories already exist. If they do, ask to overwrite
+                    //Warn if subdirectories already exist. If they do, ask to overwrite
+                    int iCount = WidgetsUtil.LocateDirectoriesByName(workingDirectory, RUN_.Trim('\\'));
+                    if (iCount > 0)
+                    {
+                        DialogResult res = MessageBox.Show("The working directory you selected already contains LANDIS-II subdirectories. Do you want to overwrite them?", 
+                            "Overwrite subfolders", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        if (res != DialogResult.Yes) 
+                        {
+                            return;
+                        }
+                    }
                     txtFilePath.Text = filePath;
                     if (txtFilePath.Text.Length > 0)
                     {
@@ -338,7 +403,7 @@ namespace Replicator
                 {
                     string runFolder = RUN_ + i;
                     string fullPath = parentFolder + runFolder + "\\" + scenarioFile;
-                    string[] childRow = new string[] { fullPath, "", "True" };
+                    string[] childRow = new string[] { fullPath, STATUS_PENDING, "True" };
                     int idxChild = dataGridView1.Rows.Add(childRow);
                 }
 
@@ -406,6 +471,18 @@ namespace Replicator
             BtnClear.Enabled = enableButtons;
             //@ToDo: Enable when validate function is enabled
             //BtnValidate.Enabled = enableButtons;
+        }
+
+        private void UpdateStatus(string scenarioPath, string newStatus)
+        {
+            foreach (DataGridViewRow row in dataGridView1.Rows) {
+                string nextPath = (string) row.Cells[0].Value;
+                if (nextPath == scenarioPath)
+                {
+                    row.Cells[1].Value = newStatus;
+                    dataGridView1.Refresh();
+                }
+            }
         }
 
     }
