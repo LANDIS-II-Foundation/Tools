@@ -19,7 +19,7 @@ namespace Replicator
         static string RUN_ = "\\run_";
         static string STATUS_PENDING = "Pending";
         static string STATUS_RUNNING = "Running";
-        static string STATUS_FAILED = "Finished";
+        static string STATUS_FAILED = "Failed";
         static string STATUS_COMPLETE = "Complete";
         // That's our custom to redirect console output to form
         TextWriter _writer = null;
@@ -48,33 +48,6 @@ namespace Replicator
             // Set the BackColor so that we can set the ForeColor to red below if there is an error
             // This is an eccentricity with MS read-only textbox
             TxtBoxStatus.BackColor = SystemColors.Control;
-            
-            //@ToDo: Don't prepopulate data after development is complete
-            //SampleData();
-        }
-
-        void SampleData()
-        {
-            string[] row0 = new string[] { "C:\\Docs\\Lesley\\Landis\\data\\age-only-succession\\scenario.txt", "", "False" };
-            int idxRow = dataGridView1.Rows.Add(row0);
-            SetParentCellStyle(idxRow);
-            string[] row1 = new string[] { "C:\\Docs\\Lesley\\Landis\\data\\age-only-succession\\run_1\\scenario.txt", "Pending", "True" };
-            dataGridView1.Rows.Add(row1);
-            string[] row2 = new string[] { "C:\\Docs\\Lesley\\Landis\\data\\age-only-succession\\run_2\\scenario.txt", "Pending", "True"};
-            dataGridView1.Rows.Add(row2);
-            string[] row3 = new string[] { "C:\\Docs\\Lesley\\Landis\\data\\age-only-succession\\run_3\\scenario.txt", "Pending", "True" };
-            dataGridView1.Rows.Add(row3);
-            string[] row4 = new string[] { "C:\\Docs\\Lesley\\Landis\\data\\output-max-spp-age\\scenario.txt", "", "False" };
-            idxRow = dataGridView1.Rows.Add(row4);
-            SetParentCellStyle(idxRow);
-            string[] row5 = new string[] { "C:\\Docs\\Lesley\\Landis\\data\\output-max-spp-age\\run_1\\scenario.txt", "Pending", "True" };
-            dataGridView1.Rows.Add(row5);
-            string[] row6 = new string[] { "C:\\Docs\\Lesley\\Landis\\data\\output-max-spp-age\\run_2\\scenario.txt", "Pending", "True" };
-            dataGridView1.Rows.Add(row6);
-            string[] row7 = new string[] { "C:\\Docs\\Lesley\\Landis\\data\\output-max-spp-age\\run_3\\scenario.txt", "Pending", "True" };
-            dataGridView1.Rows.Add(row7);
-            string[] row8 = new string[] { "C:\\Docs\\Lesley\\Landis\\data\\output-max-spp-age\\run_4\\scenario.txt", "Pending", "True" };
-            dataGridView1.Rows.Add(row8);
         }
 
         private void BtnClose_Click(object sender, EventArgs e)
@@ -129,33 +102,13 @@ namespace Replicator
 
         private void BtnRun_Click(object sender, EventArgs e)
         {
-            // Open the status window
-            //ReplicatorStatus statusForm = new ReplicatorStatus();
-            //statusForm.Owner = this;
             WidgetInterface wi = new WidgetInterface();
             // Set text writer in WidgetInterface
-            //wi.TextWriter = statusForm.StatusTextWriter;
             wi.TextWriter = _writer;
-            // clear the textbox
-            //statusForm.TxtBoxStatus_Clear();
             TxtBoxStatus.Text = "";
-            // calculate the position for the child form
-            //decimal YOffset = this.Height / 2;
-            //int posY = this.Location.Y + (int) YOffset;
-            //int posX = this.Location.X + 600;
-            //Point statusFormLocation = new Point(posX, posY);
-            //statusForm.Location = statusFormLocation;
-            //statusForm.StartPosition = FormStartPosition.Manual;
-            //statusForm.Show(this);
 
             //Disable buttons before starting processing
             enableButtons(false);
-
-            //Reset the textbox color to black
-            //statusForm.TxtBoxStatus_ForeColor(Color.Black);
-
-            //@ToDo: Is it okay to hard-code this path? If the widget runs from the LANDIS-II bin, shouldn't be needed
-            //Landis.Core.IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate();
 
             Landis.Core.IExtensionDataset extensions;
             RasterFactory rasterFactory;
@@ -164,6 +117,8 @@ namespace Replicator
 
             try
             {
+                //@ToDo: Is it okay to hard-code this path? If the widget runs from the LANDIS-II bin, shouldn't be needed
+                //Landis.Core.IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate();
                 string extFolder = Constants.EXTENSIONS_FOLDER + Constants.EXTENSIONS_XML;
                 extensions = Landis.Extensions.Dataset.LoadOrCreate(extFolder);
                 rasterFactory = new RasterFactory();
@@ -173,7 +128,6 @@ namespace Replicator
             catch (Exception exc)
             {
                 enableButtons(true);
-                //statusForm.TxtBoxStatus_ForeColor(Color.Red);
                 TxtBoxStatus.ForeColor = Color.Red;
                 string errorMessage = "An error occurred while trying to start the model.\r\n";
                 errorMessage = errorMessage + "Exception: " + exc.Message;
@@ -220,7 +174,6 @@ namespace Replicator
                     // Check for the file right before running in case it was moved
                     if (!File.Exists(scenarioFilePath))
                     {
-                        TxtBoxStatus.ForeColor = Color.Red;
                         string errorMessage = "The scenario file you specified is not valid.\r\n";
                         errorMessage = errorMessage + "Make sure you have write access to the working directory.";
                         wi.WriteLine(errorMessage);
@@ -257,10 +210,8 @@ namespace Replicator
                     {
                         //Enable buttons so user can recover from error
                         enableButtons(true);
-                        //Change the text color to red to alert the user
-                        //statusForm.TxtBoxStatus_ForeColor(Color.Red);
-                        TxtBoxStatus.ForeColor = Color.Red;
                         Boolean logAvailable = true;
+                        UpdateStatus(scenarioFilePath, STATUS_FAILED);
                         // Throw this in a try-catch in case the user doesn't have access to write the log
                         try
                         {
@@ -302,8 +253,6 @@ namespace Replicator
         {
 
             openFD.Title = "Scenario file";
-            // @ToDo: Where to set the initial directory?
-            //openFD.InitialDirectory = parentDir.FullName + "\\examples";
             openFD.FileName = "";
             openFD.Filter = "Text|*.txt";
             openFD.ShowDialog();
