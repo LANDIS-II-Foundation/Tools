@@ -435,6 +435,15 @@ namespace Replicator
             }
         }
 
+        private void lblWww_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // Specify that the link was visited. 
+            this.lblWww.LinkVisited = true;
+
+            // Navigate to a URL.
+            System.Diagnostics.Process.Start(lblWww.Text);
+        }
+
     }
 
 

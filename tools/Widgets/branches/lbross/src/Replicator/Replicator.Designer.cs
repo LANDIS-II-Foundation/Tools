@@ -56,6 +56,8 @@
             this.BtnClear = new System.Windows.Forms.Button();
             this.TxtBoxStatus = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lblWww = new System.Windows.Forms.LinkLabel();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numRuns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -318,11 +320,36 @@
             this.pictureBox1.TabIndex = 30;
             this.pictureBox1.TabStop = false;
             // 
+            // lblWww
+            // 
+            this.lblWww.AutoSize = true;
+            this.lblWww.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWww.Location = new System.Drawing.Point(167, 509);
+            this.lblWww.Name = "lblWww";
+            this.lblWww.Size = new System.Drawing.Size(143, 16);
+            this.lblWww.TabIndex = 32;
+            this.lblWww.TabStop = true;
+            this.lblWww.Text = "http://www.landis-ii.org/";
+            this.lblWww.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblWww_LinkClicked);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.ForestGreen;
+            this.label2.Location = new System.Drawing.Point(11, 509);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(162, 16);
+            this.label2.TabIndex = 31;
+            this.label2.Text = "For more information visit: ";
+            // 
             // Replicator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1174, 537);
+            this.Controls.Add(this.lblWww);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.TxtBoxStatus);
             this.Controls.Add(this.BtnClear);
@@ -372,5 +399,7 @@
         private System.Windows.Forms.DataGridViewButtonColumn Edit;
         private System.Windows.Forms.DataGridViewButtonColumn Delete;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.LinkLabel lblWww;
+        private System.Windows.Forms.Label label2;
     }
 }
