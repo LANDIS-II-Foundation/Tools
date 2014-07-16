@@ -50,7 +50,7 @@
             // BtnClose
             // 
             this.BtnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnClose.Location = new System.Drawing.Point(697, 367);
+            this.BtnClose.Location = new System.Drawing.Point(685, 362);
             this.BtnClose.Name = "BtnClose";
             this.BtnClose.Size = new System.Drawing.Size(75, 25);
             this.BtnClose.TabIndex = 10;
@@ -62,7 +62,7 @@
             // 
             this.BtnValidate.Enabled = false;
             this.BtnValidate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnValidate.Location = new System.Drawing.Point(454, 367);
+            this.BtnValidate.Location = new System.Drawing.Point(442, 362);
             this.BtnValidate.Name = "BtnValidate";
             this.BtnValidate.Size = new System.Drawing.Size(75, 25);
             this.BtnValidate.TabIndex = 9;
@@ -73,7 +73,7 @@
             // 
             this.BtnRun.Enabled = false;
             this.BtnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnRun.Location = new System.Drawing.Point(616, 367);
+            this.BtnRun.Location = new System.Drawing.Point(604, 362);
             this.BtnRun.Name = "BtnRun";
             this.BtnRun.Size = new System.Drawing.Size(75, 25);
             this.BtnRun.TabIndex = 8;
@@ -84,7 +84,7 @@
             // BtnFile
             // 
             this.BtnFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnFile.Location = new System.Drawing.Point(693, 68);
+            this.BtnFile.Location = new System.Drawing.Point(682, 68);
             this.BtnFile.Name = "BtnFile";
             this.BtnFile.Size = new System.Drawing.Size(79, 23);
             this.BtnFile.TabIndex = 12;
@@ -98,7 +98,7 @@
             this.txtFilePath.Location = new System.Drawing.Point(106, 67);
             this.txtFilePath.Name = "txtFilePath";
             this.txtFilePath.ReadOnly = true;
-            this.txtFilePath.Size = new System.Drawing.Size(581, 22);
+            this.txtFilePath.Size = new System.Drawing.Size(570, 22);
             this.txtFilePath.TabIndex = 11;
             this.txtFilePath.Text = "C:\\Docs\\Lesley\\Landis\\data\\age-only-succession\\scenario.txt";
             // 
@@ -143,7 +143,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.ForestGreen;
-            this.label3.Location = new System.Drawing.Point(7, 372);
+            this.label3.Location = new System.Drawing.Point(7, 367);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(162, 16);
             this.label3.TabIndex = 16;
@@ -153,7 +153,7 @@
             // 
             this.lblWww.AutoSize = true;
             this.lblWww.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWww.Location = new System.Drawing.Point(163, 372);
+            this.lblWww.Location = new System.Drawing.Point(163, 367);
             this.lblWww.Name = "lblWww";
             this.lblWww.Size = new System.Drawing.Size(143, 16);
             this.lblWww.TabIndex = 17;
@@ -169,7 +169,7 @@
             this.TxtBoxStatus.Name = "TxtBoxStatus";
             this.TxtBoxStatus.ReadOnly = true;
             this.TxtBoxStatus.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.TxtBoxStatus.Size = new System.Drawing.Size(475, 249);
+            this.TxtBoxStatus.Size = new System.Drawing.Size(475, 240);
             this.TxtBoxStatus.TabIndex = 18;
             this.TxtBoxStatus.Text = "Ready ...";
             // 
@@ -185,10 +185,10 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::Launcher.Properties.Resources.logos1;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(491, 109);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(281, 249);
+            this.pictureBox1.Size = new System.Drawing.Size(270, 240);
             this.pictureBox1.TabIndex = 20;
             this.pictureBox1.TabStop = false;
             // 
@@ -196,7 +196,7 @@
             // 
             this.BtnLogFile.Enabled = false;
             this.BtnLogFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnLogFile.Location = new System.Drawing.Point(535, 367);
+            this.BtnLogFile.Location = new System.Drawing.Point(523, 362);
             this.BtnLogFile.Name = "BtnLogFile";
             this.BtnLogFile.Size = new System.Drawing.Size(75, 25);
             this.BtnLogFile.TabIndex = 21;
@@ -208,7 +208,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(780, 395);
+            this.ClientSize = new System.Drawing.Size(771, 395);
             this.Controls.Add(this.BtnLogFile);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label4);
