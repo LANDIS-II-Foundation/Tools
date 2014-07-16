@@ -95,7 +95,8 @@ namespace Widgets
         }
 
         // http://msdn.microsoft.com/en-us/library/bb762914(v=vs.90).aspx
-        public static void DirectoryCopy(string sourceDirName, string destDirName, string destPrefix)
+        public static void DirectoryCopy(string sourceDirName, string destDirName, 
+                                    string destPrefix)
         {
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
             DirectoryInfo[] dirs = dir.GetDirectories();
@@ -149,6 +150,21 @@ namespace Widgets
                 string fullPath = scenarioPath + "\\" + logFiles[i];
                 File.Delete(fullPath);
             }
+        }
+
+        public static int LocateDirectoriesByName(string parentDir, string strSearch)
+        {
+            DirectoryInfo dir = new DirectoryInfo(parentDir);
+            DirectoryInfo[] dirs = dir.GetDirectories();
+            int iCount = 0;
+            foreach (DirectoryInfo subdir in dirs)
+            {
+                if (subdir.Name.IndexOf(strSearch) > -1)
+                {
+                    iCount++;
+                }
+            }
+            return iCount;
         }
     }
 }
