@@ -407,6 +407,7 @@ namespace Replicator
         private void BtnClear_Click(object sender, EventArgs e)
         {
             txtFilePath.Text = "";
+            TxtBoxStatus.Text = "Ready ...";
             BtnSave.Enabled = false;
             m_scenDictionary.Clear();
             ReloadGrid();
