@@ -100,7 +100,6 @@
             this.txtFilePath.ReadOnly = true;
             this.txtFilePath.Size = new System.Drawing.Size(570, 22);
             this.txtFilePath.TabIndex = 11;
-            this.txtFilePath.Text = "C:\\Docs\\Lesley\\Landis\\data\\age-only-succession\\scenario.txt";
             // 
             // openFD
             // 

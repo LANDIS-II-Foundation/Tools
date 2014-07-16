@@ -56,7 +56,6 @@ namespace Launcher
             // Clear the textBox
             TxtBoxStatus.Text = "";
 
-            //@ToDo: Take out default value for txtFilePath.Text
             string workingDirectory = Path.GetDirectoryName(txtFilePath.Text);
             // If the scenario path is bad print to the console and exit the sub
             // Check for the file right before running in case it was moved
@@ -156,8 +155,6 @@ namespace Launcher
         {
 
             openFD.Title = "Scenario file";
-            // @ToDo: Where to set the initial directory?
-            //openFD.InitialDirectory = parentDir.FullName + "\\examples";
             openFD.FileName = "";
             openFD.Filter = "Text|*.txt";
             openFD.ShowDialog();
