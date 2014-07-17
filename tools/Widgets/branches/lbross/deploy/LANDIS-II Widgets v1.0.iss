@@ -62,6 +62,10 @@ Source: .\icons\replicator.ico; DestDir: {app}\icons
 Name: {group}\Widgets\Launcher;     Filename: {app}\bin\Launcher.exe;  IconFilename: "{app}\icons\rocket2.ico"
 Name: {group}\Widgets\Replicator;   Filename: {app}\bin\Replicator.exe;  IconFilename: "{app}\icons\replicator.ico"
 Name: {group}\Uninstall\Widgets {#VersionRelease};   Filename: {uninstallexe}; Parameters: "/log";
+; Desktop icons
+Name: {commondesktop}\Launcher;     Filename: {app}\bin\Launcher.exe;  IconFilename: "{app}\icons\rocket2.ico"
+Name: {commondesktop}\Replicator;   Filename: {app}\bin\Replicator.exe;  IconFilename: "{app}\icons\replicator.ico"
+
 
 [Code]
 #include LandisSDK + '\packaging\Pascal-code.iss'
