@@ -9,12 +9,18 @@ using System.Windows.Forms;
 using Landis.RasterIO.Gdal;
 using Landis.SpatialModeling;
 using Widgets;
+using Landis.Core;
+using Landis;
 
 
 namespace Launcher
 {
     public partial class Launcher : Form
     {
+        static Model model;
+        static IExtensionDataset extensions;
+        static RasterFactory rasterFactory;
+        static Landis.Landscapes.LandscapeFactory landscapeFactory;
         // That's our custom to redirect console output to form
         TextWriter _writer = null;
         
@@ -41,6 +47,38 @@ namespace Launcher
             // Set the BackColor so that we can set the ForeColor to red below if there is an error
             // This is an eccentricity with MS read-only textbox
             TxtBoxStatus.BackColor = SystemColors.Control;
+
+            try
+            {
+                //@ToDo: Is it okay to hard-code this path? If the widget runs from the LANDIS-II bin, shouldn't be needed
+                //Landis.Core.IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate();
+                string extFolder = Constants.EXTENSIONS_FOLDER + Constants.EXTENSIONS_XML;
+                extensions = Landis.Extensions.Dataset.LoadOrCreate(extFolder);
+                rasterFactory = new RasterFactory();
+                landscapeFactory = new Landis.Landscapes.LandscapeFactory();
+                model = new Landis.Model(extensions, rasterFactory, landscapeFactory);
+            }
+            catch (Exception exc)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Unable to create Model:" + Environment.NewLine);
+                sb.Append(exc.Message);
+                if (exc.InnerException != null)
+                {
+                    sb.Append( exc.InnerException.Message);
+                }
+                sb.Append(Environment.NewLine);
+                sb.Append("Stack trace:" + Environment.NewLine);
+                sb.Append(exc.StackTrace);
+                MessageBox.Show(sb.ToString(), "Internal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Close the form immediately if the model couldn't be instantiated
+                this.Shown += new EventHandler(Launcher_CloseOnStart);
+            }
+        }
+
+        private void Launcher_CloseOnStart(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         private void BtnClose_Click(object sender, EventArgs e)
@@ -97,14 +135,6 @@ namespace Launcher
                 if (release != "")
                     release = string.Format(" ({0})", release);
                 wi.WriteLine("LANDIS-II {0}{1}", version, release);
-
-                //@ToDo: Is it okay to hard-code this path? If the widget runs from the LANDIS-II bin, shouldn't be needed
-                //Landis.Core.IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate();
-                string extFolder = Constants.EXTENSIONS_FOLDER + Constants.EXTENSIONS_XML;
-                Landis.Core.IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate(extFolder);
-                RasterFactory rasterFactory = new RasterFactory();
-                Landis.Landscapes.LandscapeFactory landscapeFactory = new Landis.Landscapes.LandscapeFactory();
-                Landis.Model model = new Landis.Model(extensions, rasterFactory, landscapeFactory);
                 model.Run(txtFilePath.Text, wi);
                 enableButtons(true);
                 MessageBox.Show("Model run is complete");
