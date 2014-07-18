@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using Landis.Core;
+using Landis;
 using Landis.RasterIO.Gdal;
 using Landis.SpatialModeling;
 using Widgets;
@@ -15,6 +17,11 @@ namespace Replicator
 {
     public partial class Replicator : Form
     {
+        static Model model;
+        static IExtensionDataset extensions;
+        static RasterFactory rasterFactory;
+        static Landis.Landscapes.LandscapeFactory landscapeFactory;
+        
         SortedDictionary<string, int> m_scenDictionary;
         static string RUN_ = "\\run_";
         static string STATUS_PENDING = "Pending";
@@ -23,7 +30,6 @@ namespace Replicator
         static string STATUS_COMPLETE = "Complete";
         // That's our custom to redirect console output to form
         TextWriter _writer = null;
-
         
         public Replicator()
         {
@@ -48,6 +54,38 @@ namespace Replicator
             // Set the BackColor so that we can set the ForeColor to red below if there is an error
             // This is an eccentricity with MS read-only textbox
             TxtBoxStatus.BackColor = SystemColors.Control;
+
+            try
+            {
+                //@ToDo: Is it okay to hard-code this path? If the widget runs from the LANDIS-II bin, shouldn't be needed
+                //Landis.Core.IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate();
+                string extFolder = Constants.EXTENSIONS_FOLDER + Constants.EXTENSIONS_XML;
+                extensions = Landis.Extensions.Dataset.LoadOrCreate(extFolder);
+                rasterFactory = new RasterFactory();
+                landscapeFactory = new Landis.Landscapes.LandscapeFactory();
+                model = new Landis.Model(extensions, rasterFactory, landscapeFactory);
+            }
+            catch (Exception exc)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Unable to create Model:" + Environment.NewLine);
+                sb.Append(exc.Message);
+                if (exc.InnerException != null)
+                {
+                    sb.Append(exc.InnerException.Message);
+                }
+                sb.Append(Environment.NewLine);
+                sb.Append("Stack trace:" + Environment.NewLine);
+                sb.Append(exc.StackTrace);
+                MessageBox.Show(sb.ToString(), "Internal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Close the form immediately if the model couldn't be instantiated
+                this.Shown += new EventHandler(Replicator_CloseOnStart);
+            }
+        }
+
+        private void Replicator_CloseOnStart(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         private void BtnClose_Click(object sender, EventArgs e)
@@ -109,11 +147,6 @@ namespace Replicator
 
             //Disable buttons before starting processing
             enableButtons(false);
-
-            Landis.Core.IExtensionDataset extensions;
-            RasterFactory rasterFactory;
-            Landis.Landscapes.LandscapeFactory landscapeFactory;
-            Landis.Model model;
 
             try
             {
@@ -421,6 +454,7 @@ namespace Replicator
             BtnClear.Enabled = enableButtons;
             //@ToDo: Enable when validate function is enabled
             //BtnValidate.Enabled = enableButtons;
+            dataGridView1.Enabled = enableButtons;
         }
 
         private void UpdateStatus(string scenarioPath, string newStatus)

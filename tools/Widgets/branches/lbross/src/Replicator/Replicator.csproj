@@ -120,7 +120,9 @@
       <DependentUpon>ReplicatorStatus.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -138,10 +140,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\logos_rect.jpg" />
+    <None Include="Resources\logos1.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\logos1.jpg" />
+    <None Include="Resources\logos_rect.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

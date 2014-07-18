@@ -55,9 +55,9 @@
             this.openFD = new System.Windows.Forms.OpenFileDialog();
             this.BtnClear = new System.Windows.Forms.Button();
             this.TxtBoxStatus = new System.Windows.Forms.TextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.lblWww = new System.Windows.Forms.LinkLabel();
             this.label2 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.numRuns)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -67,7 +67,7 @@
             // 
             this.lblScenarioFile.AutoSize = true;
             this.lblScenarioFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblScenarioFile.Location = new System.Drawing.Point(10, 81);
+            this.lblScenarioFile.Location = new System.Drawing.Point(10, 102);
             this.lblScenarioFile.Name = "lblScenarioFile";
             this.lblScenarioFile.Size = new System.Drawing.Size(95, 16);
             this.lblScenarioFile.TabIndex = 1;
@@ -76,7 +76,7 @@
             // BtnFile
             // 
             this.BtnFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnFile.Location = new System.Drawing.Point(405, 99);
+            this.BtnFile.Location = new System.Drawing.Point(405, 120);
             this.BtnFile.Name = "BtnFile";
             this.BtnFile.Size = new System.Drawing.Size(79, 23);
             this.BtnFile.TabIndex = 17;
@@ -87,7 +87,7 @@
             // txtFilePath
             // 
             this.txtFilePath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtFilePath.Location = new System.Drawing.Point(14, 100);
+            this.txtFilePath.Location = new System.Drawing.Point(14, 121);
             this.txtFilePath.Name = "txtFilePath";
             this.txtFilePath.ReadOnly = true;
             this.txtFilePath.Size = new System.Drawing.Size(385, 22);
@@ -99,7 +99,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.ForestGreen;
-            this.label1.Location = new System.Drawing.Point(247, 49);
+            this.label1.Location = new System.Drawing.Point(247, 46);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(272, 25);
             this.label1.TabIndex = 20;
@@ -110,7 +110,7 @@
             this.lblLandis.AutoSize = true;
             this.lblLandis.Font = new System.Drawing.Font("Verdana", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblLandis.ForeColor = System.Drawing.Color.ForestGreen;
-            this.lblLandis.Location = new System.Drawing.Point(272, 8);
+            this.lblLandis.Location = new System.Drawing.Point(272, 5);
             this.lblLandis.Name = "lblLandis";
             this.lblLandis.Size = new System.Drawing.Size(225, 42);
             this.lblLandis.TabIndex = 19;
@@ -119,7 +119,7 @@
             // numRuns
             // 
             this.numRuns.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.numRuns.Location = new System.Drawing.Point(503, 100);
+            this.numRuns.Location = new System.Drawing.Point(503, 121);
             this.numRuns.Name = "numRuns";
             this.numRuns.Size = new System.Drawing.Size(80, 22);
             this.numRuns.TabIndex = 21;
@@ -133,7 +133,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(489, 79);
+            this.label3.Location = new System.Drawing.Point(489, 100);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(112, 16);
             this.label3.TabIndex = 22;
@@ -143,7 +143,7 @@
             // 
             this.BtnSave.Enabled = false;
             this.BtnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnSave.Location = new System.Drawing.Point(589, 99);
+            this.BtnSave.Location = new System.Drawing.Point(589, 120);
             this.BtnSave.Name = "BtnSave";
             this.BtnSave.Size = new System.Drawing.Size(79, 23);
             this.BtnSave.TabIndex = 23;
@@ -174,13 +174,13 @@
             this.HideButton,
             this.Edit,
             this.Delete});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 144);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 158);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 25;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(660, 350);
+            this.dataGridView1.Size = new System.Drawing.Size(660, 323);
             this.dataGridView1.StandardTab = true;
             this.dataGridView1.TabIndex = 24;
             this.dataGridView1.TabStop = false;
@@ -250,7 +250,7 @@
             // BtnClose
             // 
             this.BtnClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnClose.Location = new System.Drawing.Point(597, 506);
+            this.BtnClose.Location = new System.Drawing.Point(597, 487);
             this.BtnClose.Name = "BtnClose";
             this.BtnClose.Size = new System.Drawing.Size(75, 23);
             this.BtnClose.TabIndex = 27;
@@ -262,7 +262,7 @@
             // 
             this.BtnValidate.Enabled = false;
             this.BtnValidate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnValidate.Location = new System.Drawing.Point(354, 506);
+            this.BtnValidate.Location = new System.Drawing.Point(354, 487);
             this.BtnValidate.Name = "BtnValidate";
             this.BtnValidate.Size = new System.Drawing.Size(75, 23);
             this.BtnValidate.TabIndex = 26;
@@ -273,7 +273,7 @@
             // 
             this.BtnRun.Enabled = false;
             this.BtnRun.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnRun.Location = new System.Drawing.Point(516, 506);
+            this.BtnRun.Location = new System.Drawing.Point(516, 487);
             this.BtnRun.Name = "BtnRun";
             this.BtnRun.Size = new System.Drawing.Size(75, 23);
             this.BtnRun.TabIndex = 25;
@@ -288,7 +288,7 @@
             // BtnClear
             // 
             this.BtnClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BtnClear.Location = new System.Drawing.Point(435, 506);
+            this.BtnClear.Location = new System.Drawing.Point(435, 487);
             this.BtnClear.Name = "BtnClear";
             this.BtnClear.Size = new System.Drawing.Size(75, 23);
             this.BtnClear.TabIndex = 28;
@@ -300,7 +300,7 @@
             // 
             this.TxtBoxStatus.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.TxtBoxStatus.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TxtBoxStatus.Location = new System.Drawing.Point(687, 206);
+            this.TxtBoxStatus.Location = new System.Drawing.Point(687, 158);
             this.TxtBoxStatus.Multiline = true;
             this.TxtBoxStatus.Name = "TxtBoxStatus";
             this.TxtBoxStatus.ReadOnly = true;
@@ -310,21 +310,11 @@
             this.TxtBoxStatus.TabStop = false;
             this.TxtBoxStatus.Text = "Ready ...";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.ErrorImage = null;
-            this.pictureBox1.Image = global::Replicator.Properties.Resources.logos_rect;
-            this.pictureBox1.Location = new System.Drawing.Point(805, 8);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(339, 192);
-            this.pictureBox1.TabIndex = 30;
-            this.pictureBox1.TabStop = false;
-            // 
             // lblWww
             // 
             this.lblWww.AutoSize = true;
             this.lblWww.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblWww.Location = new System.Drawing.Point(167, 509);
+            this.lblWww.Location = new System.Drawing.Point(167, 492);
             this.lblWww.Name = "lblWww";
             this.lblWww.Size = new System.Drawing.Size(143, 16);
             this.lblWww.TabIndex = 32;
@@ -337,17 +327,27 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.ForestGreen;
-            this.label2.Location = new System.Drawing.Point(11, 509);
+            this.label2.Location = new System.Drawing.Point(11, 490);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(162, 16);
             this.label2.TabIndex = 31;
             this.label2.Text = "For more information visit: ";
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.ErrorImage = null;
+            this.pictureBox1.Image = global::Replicator.Properties.Resources.logos_rect;
+            this.pictureBox1.Location = new System.Drawing.Point(687, 7);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(384, 144);
+            this.pictureBox1.TabIndex = 30;
+            this.pictureBox1.TabStop = false;
+            // 
             // Replicator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1174, 537);
+            this.ClientSize = new System.Drawing.Size(1174, 517);
             this.Controls.Add(this.lblWww);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.pictureBox1);
