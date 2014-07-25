@@ -207,6 +207,7 @@ namespace Launcher
                     if (txtFilePath.Text.Length > 0)
                     {
                         BtnRun.Enabled = true;
+                        BtnValidate.Enabled = true;
                         enableLogButton();
                     }
                 }
@@ -235,7 +236,7 @@ namespace Launcher
                 enableLogButton();
             }
             //@ToDo: Enable when validate function is enabled
-            //BtnValidate.Enabled = enableButtons;
+            BtnValidate.Enabled = enableButtons;
         }
 
         private void enableLogButton()
@@ -254,6 +255,97 @@ namespace Launcher
             string logName = WidgetsUtil.GetAppSetting("landis_log");
             string fullPath = Path.GetDirectoryName(txtFilePath.Text) + "\\" + logName;
             System.Diagnostics.Process.Start(fullPath);
+        }
+
+        private void BtnValidate_Click(object sender, EventArgs e)
+        {
+            WidgetInterface wi = new WidgetInterface();
+            // Set text writer in WidgetInterface
+            wi.TextWriter = _writer;
+            // Clear the textBox
+            TxtBoxStatus.Text = "";
+
+            string workingDirectory = Path.GetDirectoryName(txtFilePath.Text);
+            // If the scenario path is bad print to the console and exit the sub
+            // Check for the file right before running in case it was moved
+            if (!File.Exists(txtFilePath.Text))
+            {
+                TxtBoxStatus.ForeColor = Color.Red;
+                string errorMessage = "The scenario file you specified is not valid.\r\n";
+                errorMessage = errorMessage + "Make sure you have write access to the working directory.";
+                wi.WriteLine(errorMessage);
+                return;
+            }
+
+            // The log4net section in the application's configuration file
+            // requires the environment variable WORKING_DIR be set to the
+            // current working directory.
+            // This will be the folder containing the scenario .txt file
+
+            Environment.SetEnvironmentVariable(Constants.ENV_WORKING_DIR, workingDirectory);
+            log4net.Config.XmlConfigurator.Configure();
+            // Set the working directory for the Model
+            Directory.SetCurrentDirectory(workingDirectory);
+
+            try
+            {
+                //Disable buttons before starting processing
+                enableButtons(false);
+
+                //Reset the textbox color to black
+                TxtBoxStatus.ForeColor = Color.Black;
+
+                Validator validator = new Validator(model, landscapeFactory, wi);
+                validator.ValidateScenario(txtFilePath.Text, extensions, rasterFactory);
+                wi.WriteLine("Validation is complete.");
+                enableButtons(true);
+                MessageBox.Show("Validation is complete");
+            }
+            catch (Exception exc)
+            {
+                //Enable buttons so user can recover from error
+                enableButtons(true);
+                //Change the text color to red to alert the user
+                TxtBoxStatus.ForeColor = Color.Red;
+                Boolean logAvailable = true;
+                // Throw this in a try-catch in case the user doesn't have access to write the log
+                try
+                {
+                    using (TextWriter writer = File.CreateText(workingDirectory + Constants.ERROR_LOG))
+                    {
+                        writer.WriteLine("Validation failed:");
+                        writer.WriteLine("  {0}", exc.Message);
+                        if (exc.InnerException != null)
+                        {
+                            writer.WriteLine("  {0}", exc.InnerException.Message);
+                        }
+                        writer.WriteLine();
+                        writer.WriteLine("Stack trace:");
+                        writer.WriteLine(exc.StackTrace);
+                    }
+                }
+                catch (Exception exc2)
+                {
+                    logAvailable = false;
+                    string strError2 = "\r\nAn error occurred while writing the error log.\r\n" +
+                                        "The most likely cause is that you do not have permissions to the working directory";
+                    wi.WriteLine(strError2);
+                    Console.WriteLine("Launcher exception: " + exc2);
+                }
+                //Print an error message
+                if (logAvailable == true)
+                {
+                    wi.WriteLine("\r\nValidation failed:");
+                    wi.WriteLine("  {0}", exc.Message);
+                    //if (exc.InnerException != null)
+                    //{
+                    //    wi.WriteLine("  {0}", exc.InnerException.Message);
+                    //}
+                    string strError = "\r\nAn error log is available at " + workingDirectory + Constants.ERROR_LOG;
+                    wi.WriteLine(strError);
+
+                }
+            }
         }
 
     }
