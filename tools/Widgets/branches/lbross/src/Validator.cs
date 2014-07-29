@@ -21,8 +21,10 @@ namespace Widgets
     {
 
         private SiteVarRegistry siteVarRegistry;
+        private IExtensionDataset extensionDataset;
         private ISpeciesDataset species;
         private IEcoregionDataset ecoregions;
+        private IConfigurableRasterFactory rasterFactory;
         private ILandscapeFactory landscapeFactory;
         private ILandscape landscape;
         //private float cellLength;  // meters
@@ -46,27 +48,31 @@ namespace Widgets
         /// <summary>
         /// Initializes a new instance.
         /// </summary>
-        public Validator(Model aModel, ILandscapeFactory landscapeFactory, IUserInterface UI)
+        public Validator(IExtensionDataset extensionDataset,
+                         IConfigurableRasterFactory rasterFactory,
+                         ILandscapeFactory landscapeFactory, 
+                         Model aModel, 
+                         IUserInterface UI)
         {
+            this.extensionDataset = extensionDataset;
+            this.rasterFactory = rasterFactory;
+            this.landscapeFactory = landscapeFactory;
             this.model = aModel;
             this.ui = UI;
-            this.landscapeFactory = landscapeFactory;
             siteVarRegistry = new SiteVarRegistry();
         }
 
-        public void ValidateScenario(string scenarioTextFilePath, IExtensionDataset extensions,
-                                     RasterFactory rasterFactory)
+        public void ValidateScenario(string scenarioTextFilePath)
         {
             siteVarRegistry.Clear();
-            
-            ScenarioParser parser = new ScenarioParser(extensions);
+
+            ScenarioParser parser = new ScenarioParser(extensionDataset);
             Scenario scenario = Landis.Data.Load<Scenario>(scenarioTextFilePath, parser);
             InitializeRandomNumGenerator(scenario.RandomNumberSeed, model, ui);
             LoadSpecies(scenario.Species, ui);
             LoadEcoregions(scenario.Ecoregions, ui);
 
             //ui.WriteLine("Initializing landscape from ecoregions map \"{0}\" ...", scenario.EcoregionsMap);
-
             Landis.Ecoregions.Map ecoregionsMap = new Landis.Ecoregions.Map(scenario.EcoregionsMap,
                                                               ecoregions,
                                                               rasterFactory);
@@ -75,7 +81,7 @@ namespace Widgets
             {
                 //ui.WriteLine("Map dimensions: {0} = {1:#,##0} cell{2}", grid.Dimensions,
                              //grid.Count, (grid.Count == 1 ? "" : "s"));
-                // landscape = new Landscape(grid);
+                //landscape = new Landscape(grid);
                 landscape = landscapeFactory.CreateLandscape(grid);
             }
 
@@ -92,9 +98,9 @@ namespace Widgets
             succession.LoadParameters(scenario.Succession.InitFile, this);
             succession.Initialize();
             ExtensionMain[] disturbanceExtensions = LoadExtensions(scenario.Disturbances, model, ui);
-            InitExtensions(disturbanceExtensions);
+            //InitExtensions(disturbanceExtensions);
             ExtensionMain[] otherExtensions = LoadExtensions(scenario.OtherExtensions, model, ui);
-            InitExtensions(otherExtensions);
+            //InitExtensions(otherExtensions);
         }
 
         private static void InitializeRandomNumGenerator(uint? seed, Model model, IUserInterface ui)
@@ -136,9 +142,9 @@ namespace Widgets
                 ExtensionMain loadedExtension = Loader.Load<ExtensionMain>(extensionAndInitFile.Info);
                 loadedExtension.LoadParameters(extensionAndInitFile.InitFile, this);
 
-                loadedExtensions[i] = loadedExtension;
+                //loadedExtensions[i] = loadedExtension;
 
-                disturbAndOtherExtensions.Add(loadedExtension);
+                //disturbAndOtherExtensions.Add(loadedExtension);
             }
             return loadedExtensions;
         }
