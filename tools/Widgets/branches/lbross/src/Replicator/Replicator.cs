@@ -16,18 +16,15 @@ using Widgets;
 namespace Replicator
 {
     public partial class Replicator : Form
-    {
-        static Model model;
-        static IExtensionDataset extensions;
-        static RasterFactory rasterFactory;
-        static Landis.Landscapes.LandscapeFactory landscapeFactory;
-        
+    {        
         SortedDictionary<string, int> m_scenDictionary;
         static string RUN_ = "\\run_";
+        static string VALIDATE_ = "\\validate_";
         static string STATUS_PENDING = "Pending";
         static string STATUS_RUNNING = "Running";
         static string STATUS_FAILED = "Failed";
         static string STATUS_COMPLETE = "Complete";
+        static string STATUS_VALIDATED = "Validated";
         // That's our custom to redirect console output to form
         TextWriter _writer = null;
         
@@ -54,38 +51,6 @@ namespace Replicator
             // Set the BackColor so that we can set the ForeColor to red below if there is an error
             // This is an eccentricity with MS read-only textbox
             TxtBoxStatus.BackColor = SystemColors.Control;
-
-            try
-            {
-                //@ToDo: Is it okay to hard-code this path? If the widget runs from the LANDIS-II bin, shouldn't be needed
-                //Landis.Core.IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate();
-                string extFolder = Constants.EXTENSIONS_FOLDER + Constants.EXTENSIONS_XML;
-                extensions = Landis.Extensions.Dataset.LoadOrCreate(extFolder);
-                rasterFactory = new RasterFactory();
-                landscapeFactory = new Landis.Landscapes.LandscapeFactory();
-                model = new Landis.Model(extensions, rasterFactory, landscapeFactory);
-            }
-            catch (Exception exc)
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("Unable to create Model:" + Environment.NewLine);
-                sb.Append(exc.Message);
-                if (exc.InnerException != null)
-                {
-                    sb.Append(exc.InnerException.Message);
-                }
-                sb.Append(Environment.NewLine);
-                sb.Append("Stack trace:" + Environment.NewLine);
-                sb.Append(exc.StackTrace);
-                MessageBox.Show(sb.ToString(), "Internal Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                // Close the form immediately if the model couldn't be instantiated
-                this.Shown += new EventHandler(Replicator_CloseOnStart);
-            }
-        }
-
-        private void Replicator_CloseOnStart(object sender, EventArgs e)
-        {
-            this.Close();
         }
 
         private void BtnClose_Click(object sender, EventArgs e)
@@ -145,29 +110,15 @@ namespace Replicator
             wi.TextWriter = _writer;
             TxtBoxStatus.Text = "";
 
-            //Disable buttons before starting processing
-            enableButtons(false);
-
-            try
-            {
-                //@ToDo: Is it okay to hard-code this path? If the widget runs from the LANDIS-II bin, shouldn't be needed
-                //Landis.Core.IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate();
-                string extFolder = Constants.EXTENSIONS_FOLDER + Constants.EXTENSIONS_XML;
-                extensions = Landis.Extensions.Dataset.LoadOrCreate(extFolder);
-                rasterFactory = new RasterFactory();
-                landscapeFactory = new Landis.Landscapes.LandscapeFactory();
-                model = new Landis.Model(extensions, rasterFactory, landscapeFactory);
-            }
-            catch (Exception exc)
-            {
-                enableButtons(true);
-                TxtBoxStatus.ForeColor = Color.Red;
-                string errorMessage = "An error occurred while trying to start the model.\r\n";
-                errorMessage = errorMessage + "Exception: " + exc.Message;
-                errorMessage = errorMessage + exc.StackTrace;
-                wi.WriteLine(errorMessage);
-                return;
-            }
+            // Get the installed LANDIS version from the console
+            //string version = Landis.App.GetAppSetting("version");
+            string version = WidgetsUtil.GetAssemblySetting("version");
+            if (version == "")
+                throw new Exception("The LANDIS application setting \"version\" is empty or blank");
+            string release = WidgetsUtil.GetAssemblySetting("release");
+            if (release != "")
+                release = string.Format(" ({0})", release);
+            wi.WriteLine("LANDIS-II {0}{1}", version, release);
 
             // First we create the replicated directories
             foreach (KeyValuePair<string, int> entry in m_scenDictionary)
@@ -175,20 +126,17 @@ namespace Replicator
                 string parentFolder = Path.GetDirectoryName(entry.Key);
                 string scenarioFile = Path.GetFileName(entry.Key);
 
-                // Delete any existing run_ subdirectories
-                DirectoryInfo dir = new DirectoryInfo(parentFolder);
-                DirectoryInfo[] dirs = dir.GetDirectories();
-                foreach (DirectoryInfo subdir in dirs)
+                int success = DeleteOldDirectories(parentFolder, wi, false);
+                if (success != 0)
                 {
-                    if (subdir.Name.IndexOf(RUN_.Trim('\\')) > -1)
-                    {
-                        subdir.Delete(true);
-                    }
+                    break;
                 }
 
                 // Add the child rows
                 for (int i = 1; i <= entry.Value; i++)
                 {
+                    //Disable buttons before starting processing
+                    enableButtons(false);
                     string runFolder = RUN_ + i;
                     string fullPath = parentFolder + runFolder;
                     string scenarioFilePath = fullPath + "\\" + scenarioFile;
@@ -226,18 +174,38 @@ namespace Replicator
                         // Set the working directory for the Model
                         Directory.SetCurrentDirectory(fullPath);
 
-                        // Get the installed LANDIS version from the console
-                        //string version = Landis.App.GetAppSetting("version");
-                        string version = WidgetsUtil.GetAssemblySetting("version");
-                        if (version == "")
-                            throw new Exception("The LANDIS application setting \"version\" is empty or blank");
-                        string release = WidgetsUtil.GetAssemblySetting("release");
-                        if (release != "")
-                            release = string.Format(" ({0})", release);
-                        wi.WriteLine("LANDIS-II {0}{1}", version, release);
-
+                        Model model = InitializeModel();
                         model.Run(scenarioFilePath, wi);
                         UpdateStatus(scenarioFilePath, STATUS_COMPLETE);
+                    }
+                    catch (IOException IOexc)
+                    {
+                        //Enable buttons so user can recover from error
+                        enableButtons(true);
+                        //Change the text color to red to alert the user
+                        TxtBoxStatus.ForeColor = Color.Red;
+                        String search = "used by another process";
+                        if (IOexc.Message.IndexOf(search) > -1)
+                        {
+                            wi.WriteLine("\r\nOne or more files is locked due to the previous scenario run.");
+                            wi.WriteLine("\rPlease close the Replicator and try again.");
+                        }
+                        else
+                        {
+                            wi.WriteLine("\r\nA file access error occurred.");
+                        }
+                        using (TextWriter writer = File.CreateText(fullPath + Constants.ERROR_LOG))
+                        {
+                            writer.WriteLine("A file access error occurred:");
+                            writer.WriteLine("  {0}", IOexc.Message);
+                            if (IOexc.InnerException != null)
+                            {
+                                writer.WriteLine("  {0}", IOexc.InnerException.Message);
+                            }
+                            writer.WriteLine();
+                            writer.WriteLine("Stack trace:");
+                            writer.WriteLine(IOexc.StackTrace);
+                        }
                     }
                     catch (Exception exc)
                     {
@@ -397,10 +365,12 @@ namespace Replicator
             if (m_scenDictionary.Keys.Count > 0)
             {
                 BtnRun.Enabled = true;
+                BtnValidate.Enabled = true;
             }
             else
             {
                 BtnRun.Enabled = false;
+                BtnValidate.Enabled= false;
             }
 
         }
@@ -452,8 +422,7 @@ namespace Replicator
             BtnRun.Enabled = enableButtons;
             BtnSave.Enabled = enableButtons;
             BtnClear.Enabled = enableButtons;
-            //@ToDo: Enable when validate function is enabled
-            //BtnValidate.Enabled = enableButtons;
+            BtnValidate.Enabled = enableButtons;
             dataGridView1.Enabled = enableButtons;
         }
 
@@ -476,6 +445,231 @@ namespace Replicator
 
             // Navigate to a URL.
             System.Diagnostics.Process.Start(lblWww.Text);
+        }
+
+        private void BtnValidate_Click(object sender, EventArgs e)
+        {
+            WidgetInterface wi = new WidgetInterface();
+            // Set text writer in WidgetInterface
+            wi.TextWriter = _writer;
+            TxtBoxStatus.Text = "";
+
+            // Get the installed LANDIS version from the console
+            //string version = Landis.App.GetAppSetting("version");
+            string version = WidgetsUtil.GetAssemblySetting("version");
+            if (version == "")
+                throw new Exception("The LANDIS application setting \"version\" is empty or blank");
+            string release = WidgetsUtil.GetAssemblySetting("release");
+            if (release != "")
+                release = string.Format(" ({0})", release);
+            wi.WriteLine("LANDIS-II {0}{1}", version, release);
+
+            //Disable buttons before starting processing
+            enableButtons(false);
+
+            // First we create the replicated directories
+            foreach (KeyValuePair<string, int> entry in m_scenDictionary)
+            {
+                string parentFolder = Path.GetDirectoryName(entry.Key);
+                string scenarioFile = Path.GetFileName(entry.Key);
+
+                // Delete any existing run_, validate_ subdirectories
+                int success = DeleteOldDirectories(parentFolder, wi, true);
+                if (success != 0)
+                {
+                    break;
+                }
+
+                // Add the child folders
+                for (int i = 1; i <= entry.Value; i++)
+                {
+                    string validateFolder = VALIDATE_ + i;
+                    string validatePath = parentFolder + validateFolder;
+                    string validateScenarioFilePath = validatePath + "\\" + scenarioFile;
+                    string runFolder = RUN_ + i;
+                    string runPath = parentFolder + runFolder;
+                    string scenarioFilePath = runPath + "\\" + scenarioFile;
+                    UpdateStatus(scenarioFilePath, STATUS_RUNNING);
+
+                    // Create validate_ subdirectories
+                    wi.WriteLine("Creating new subdirectories for " + validatePath);
+                    WidgetsUtil.DirectoryCopy(parentFolder, validatePath, VALIDATE_.Trim('\\'));
+                    // Delete the landis log and error log files from the children
+                    string[] logs = new string[2];
+                    logs[0] = WidgetsUtil.GetAppSetting("landis_log");
+                    logs[1] = Constants.ERROR_LOG.Trim('\\');
+                    WidgetsUtil.DeleteLogFiles(validatePath, logs);
+
+                    // If the scenario path is bad print to the console and exit the sub
+                    // Check for the file right before running in case it was moved
+                    if (!File.Exists(validateScenarioFilePath))
+                    {
+                        string errorMessage = "The scenario file you specified is not valid.\r\n";
+                        errorMessage = errorMessage + "Make sure you have write access to the working directory.";
+                        wi.WriteLine(errorMessage);
+                        break;
+                    }
+
+                    try
+                    {
+                        // The log4net section in the application's configuration file
+                        // requires the environment variable WORKING_DIR be set to the
+                        // current working directory.
+                        // This will be the folder containing the scenario .txt file
+
+                        Environment.SetEnvironmentVariable(Constants.ENV_WORKING_DIR, validatePath);
+                        log4net.Config.XmlConfigurator.Configure();
+
+                        // Set the working directory for the Model
+                        Directory.SetCurrentDirectory(validatePath);
+
+                        Model model = InitializeModel();
+                        Validator validator = InitializeValidator(model, wi);
+                        validator.ValidateScenario(validateScenarioFilePath);
+                        UpdateStatus(scenarioFilePath, STATUS_VALIDATED);
+                        wi.WriteLine("\nValidation is complete");
+                    }
+                    catch (Exception exc)
+                    {
+                        //Enable buttons so user can recover from error
+                        enableButtons(true);
+                        Boolean logAvailable = true;
+                        UpdateStatus(scenarioFilePath, STATUS_FAILED);
+                        // Throw this in a try-catch in case the user doesn't have access to write the log
+                        try
+                        {
+                            using (TextWriter writer = File.CreateText(validatePath + Constants.ERROR_LOG))
+                            {
+                                writer.WriteLine("Validation failed:");
+                                writer.WriteLine("  {0}", exc.Message);
+                                if (exc.InnerException != null)
+                                {
+                                    writer.WriteLine("  {0}", exc.InnerException.Message);
+                                }
+                                writer.WriteLine();
+                                writer.WriteLine("Stack trace:");
+                                writer.WriteLine(exc.StackTrace);
+                            }
+                        }
+                        catch (Exception exc2)
+                        {
+                            logAvailable = false;
+                            string strError2 = "\r\nAn error occurred while writing the error log.\r\n" +
+                                                "The most likely cause is that you do not have permissions to the working directory";
+                            wi.WriteLine(strError2);
+                            Console.WriteLine("Replicator exception: " + exc2);
+                        }
+                        //Print an error message
+                        if (logAvailable == true)
+                        {
+
+                            wi.WriteLine("\r\nValidation failed:");
+                            wi.WriteLine("  {0}", exc.Message);
+                            string strError = "\r\nAn error log is available at " + validatePath + Constants.ERROR_LOG;
+                            wi.WriteLine(strError);
+                        }
+                    }
+                }
+            }
+            enableButtons(true);
+        }
+
+        private Model InitializeModel()
+        {
+
+            Model model;
+            //@ToDo: Is it okay to hard-code this path? If the widget runs from the LANDIS-II bin, shouldn't be needed
+            //Landis.Core.IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate();
+            string extFolder = Constants.EXTENSIONS_FOLDER + Constants.EXTENSIONS_XML;
+            IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate(extFolder);
+            //IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate();
+            RasterFactory rasterFactory = new RasterFactory();
+            Landis.Landscapes.LandscapeFactory landscapeFactory = new Landis.Landscapes.LandscapeFactory();
+            model = new Landis.Model(extensions, rasterFactory, landscapeFactory);
+            return model;
+        }
+
+        private Validator InitializeValidator(Model _model, IUserInterface _ui)
+        {
+
+            Validator _validator;
+            string extFolder = Constants.EXTENSIONS_FOLDER + Constants.EXTENSIONS_XML;
+            IExtensionDataset extensions = Landis.Extensions.Dataset.LoadOrCreate(extFolder);
+            RasterFactory rasterFactory = new RasterFactory();
+            Landis.Landscapes.LandscapeFactory landscapeFactory = new Landis.Landscapes.LandscapeFactory();
+            _validator = new Validator(extensions, rasterFactory, landscapeFactory, _model, _ui);
+            return _validator;
+        }
+
+        private int DeleteOldDirectories(string scenarioFolder, IUserInterface wi, Boolean deleteValidate)
+        {
+
+            try
+            {
+                // Delete any existing run_, validate_ subdirectories
+                DirectoryInfo dir = new DirectoryInfo(scenarioFolder);
+                DirectoryInfo[] dirs = dir.GetDirectories();
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    // I also wanted to delete the validation directories here but couldn't
+                    // due to a file lock on ecoregions.gis
+                    if (subdir.Name.IndexOf(RUN_.Trim('\\')) > -1)
+                    {
+                        subdir.Delete(true);
+                    }
+                    if (deleteValidate == true)
+                    {
+                        if (subdir.Name.IndexOf(VALIDATE_.Trim('\\')) > -1)
+                        {
+                            subdir.Delete(true);
+                        }
+
+                    }
+                }
+                return 0;
+            }
+            catch (Exception exc)
+            {
+                //Enable buttons so user can recover from error
+                enableButtons(true);
+                //Change the text color to red to alert the user
+                TxtBoxStatus.ForeColor = Color.Red;
+                Boolean logAvailable = true;
+                // Throw this in a try-catch in case the user doesn't have access to write the log
+                try
+                {
+                    using (TextWriter writer = File.CreateText(scenarioFolder + Constants.ERROR_LOG))
+                    {
+                        writer.WriteLine("Delete failed:");
+                        writer.WriteLine("  {0}", exc.Message);
+                        if (exc.InnerException != null)
+                        {
+                            writer.WriteLine("  {0}", exc.InnerException.Message);
+                        }
+                        writer.WriteLine();
+                        writer.WriteLine("Stack trace:");
+                        writer.WriteLine(exc.StackTrace);
+                    }
+                }
+                catch (Exception exc2)
+                {
+                    logAvailable = false;
+                    string strError2 = "\r\nAn error occurred while writing the error log.\r\n" +
+                                        "The most likely cause is that you do not have permissions to the working directory";
+                    wi.WriteLine(strError2);
+                    Console.WriteLine("Replicator exception: " + exc2);
+                    return -1;
+                }
+                //Print an error message
+                if (logAvailable == true)
+                {
+                    wi.WriteLine("\r\nOne or more files is locked due to the previous scenario validation or run.");
+                    wi.WriteLine("\rPlease close the Replicator and try again.");
+                    string strError = "\r\nAn error log is available at " + scenarioFolder + Constants.ERROR_LOG;
+                    wi.WriteLine(strError);
+                }
+                return -1;
+            }
         }
 
     }
