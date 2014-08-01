@@ -67,6 +67,7 @@ namespace Widgets
                 //No permission. 
                 //Either throw an exception so this can be handled by a calling function
                 //or inform the user that they do not have permission to write to the folder and return.
+                Console.WriteLine("HasWriteAccess Exception: " + ex.Message);
                 return false;
             }
         }
@@ -90,6 +91,7 @@ namespace Widgets
             catch (Exception ex)
             {
                 // An error occured when trying to open the log
+                Console.WriteLine("LandisLogExists Exception: " + ex.Message);
                 return false;
             }
         }
