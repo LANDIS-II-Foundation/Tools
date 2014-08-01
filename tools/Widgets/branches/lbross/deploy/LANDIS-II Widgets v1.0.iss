@@ -42,13 +42,13 @@ UninstallDisplayIcon=.\icons\Tree.ico
 ; Install Widgets .dll
 Source: ..\build\{#ExtensionAssembly}; DestDir: {app}\bin
 ; Install Launcher executable
-Source: ..\build\Launcher.exe; DestDir: {app}\bin
+Source: ..\build\Landis-II Launcher.exe; DestDir: {app}\bin
 ; Install configuration file
-Source: ..\build\Launcher.exe.config; DestDir: {app}\bin
+Source: ..\build\Landis-II Launcher.exe.config; DestDir: {app}\bin
 ; Install Replicator executable
-Source: ..\build\Replicator.exe; DestDir: {app}\bin
+Source: ..\build\Landis-II Replicator.exe; DestDir: {app}\bin
 ; Install configuration file
-Source: ..\build\Replicator.exe.config; DestDir: {app}\bin
+Source: ..\build\Landis-II Replicator.exe.config; DestDir: {app}\bin
 
 
 ; Install Files and Necessary Libraries
@@ -56,15 +56,15 @@ Source: ..\build\Replicator.exe.config; DestDir: {app}\bin
 
 ; Copy icons
 Source: .\icons\rocket2.ico; DestDir: {app}\icons
-Source: .\icons\replicator.ico; DestDir: {app}\icons
+Source: .\icons\ReplicatorIcon.ico; DestDir: {app}\icons
 
 [Icons]
-Name: {group}\Widgets\Launcher;     Filename: {app}\bin\Launcher.exe;  IconFilename: "{app}\icons\rocket2.ico"
-Name: {group}\Widgets\Replicator;   Filename: {app}\bin\Replicator.exe;  IconFilename: "{app}\icons\replicator.ico"
-Name: {group}\Uninstall\Widgets {#VersionRelease};   Filename: {uninstallexe}; Parameters: "/log";
+Name: {group}\Widgets\Landis-II Launcher;     Filename: {app}\bin\Landis-II Launcher.exe;  IconFilename: "{app}\icons\rocket2.ico"
+Name: {group}\Widgets\Landis-II Replicator;   Filename: {app}\bin\Landis-II Replicator.exe;  IconFilename: "{app}\icons\ReplicatorIcon.ico"
+Name: {group}\Uninstall\Landis-II Widgets {#VersionRelease};   Filename: {uninstallexe}; Parameters: "/log";
 ; Desktop icons
-Name: {commondesktop}\Launcher;     Filename: {app}\bin\Launcher.exe;  IconFilename: "{app}\icons\rocket2.ico"
-Name: {commondesktop}\Replicator;   Filename: {app}\bin\Replicator.exe;  IconFilename: "{app}\icons\replicator.ico"
+Name: {commondesktop}\Landis-II Launcher;     Filename: {app}\bin\Landis-II Launcher.exe;  IconFilename: "{app}\icons\rocket2.ico"
+Name: {commondesktop}\Landis-II Replicator;   Filename: {app}\bin\Landis-II Replicator.exe;  IconFilename: "{app}\icons\ReplicatorIcon.ico"
 
 
 [Code]
