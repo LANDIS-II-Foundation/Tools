@@ -131,6 +131,7 @@ namespace Launcher
                    writer.WriteLine();
                    writer.WriteLine("Stack trace:");
                    writer.WriteLine(IOexc.StackTrace);
+                   System.Diagnostics.Process.Start(workingDirectory + Constants.ERROR_LOG);
                }
             }
             catch (Exception exc)
@@ -169,7 +170,7 @@ namespace Launcher
                 {
                     string strError = "\r\nA program error occurred.\r\nThe error log is available at " + workingDirectory + Constants.ERROR_LOG;
                     wi.WriteLine(strError);
-
+                    System.Diagnostics.Process.Start(workingDirectory + Constants.ERROR_LOG);
                 }
             }
 
@@ -338,7 +339,7 @@ namespace Launcher
                     //}
                     string strError = "\r\nAn error log is available at " + workingDirectory + Constants.ERROR_LOG;
                     wi.WriteLine(strError);
-
+                    System.Diagnostics.Process.Start(workingDirectory + Constants.ERROR_LOG);
                 }
             }
         }
