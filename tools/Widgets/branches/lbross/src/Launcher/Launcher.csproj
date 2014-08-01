@@ -9,7 +9,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Launcher</RootNamespace>
-    <AssemblyName>Launcher</AssemblyName>
+    <AssemblyName>Landis-II Launcher</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
