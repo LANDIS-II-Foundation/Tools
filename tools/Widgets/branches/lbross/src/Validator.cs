@@ -36,7 +36,8 @@ namespace Widgets
         //private int timeSinceStart;
         private List<ExtensionMain> disturbAndOtherExtensions;
         private SuccessionMain succession;
-        private static Generator RandomNumberGenerator;
+        // Resolve warning about RandomNumberGenerator being never assigned to
+        private static Generator RandomNumberGenerator = new MT19937Generator();
         private Model model;
         private IUserInterface ui;
 
