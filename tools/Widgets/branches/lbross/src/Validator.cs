@@ -30,10 +30,10 @@ namespace Widgets
         //private float cellLength;  // meters
         //private float cellArea;    // hectares
         private ISiteVar<IEcoregion> ecoregionSiteVar;
-        //private int startTime;
-        //private int endTime;
-        //private int currentTime;
-        //private int timeSinceStart;
+        private int startTime;
+        private int endTime;
+        private int currentTime;
+        private int timeSinceStart;
         private List<ExtensionMain> disturbAndOtherExtensions;
         private SuccessionMain succession;
         // Resolve warning about RandomNumberGenerator being never assigned to
@@ -91,6 +91,10 @@ namespace Widgets
 
             ScenarioParser parser = new ScenarioParser(extensionDataset);
             Scenario scenario = Landis.Data.Load<Scenario>(scenarioTextFilePath, parser);
+            startTime = scenario.StartTime;
+            endTime = scenario.EndTime;
+            timeSinceStart = 0;
+            currentTime = startTime;
             InitializeRandomNumGenerator(scenario.RandomNumberSeed);
             LoadSpecies(scenario.Species, ui);
             LoadEcoregions(scenario.Ecoregions, ui);
@@ -443,8 +447,7 @@ namespace Widgets
         {
             get
             {
-                ICore core = (ICore)model;
-                return core.StartTime;
+                return startTime;
             }
         }
 
@@ -454,8 +457,7 @@ namespace Widgets
         {
             get
             {
-                ICore core = (ICore)model;
-                return core.EndTime;
+                return endTime;
             }
         }
 
@@ -465,8 +467,7 @@ namespace Widgets
         {
             get
             {
-                ICore core = (ICore)model;
-                return core.CurrentTime;
+                return currentTime;
             }
         }
 
@@ -475,8 +476,7 @@ namespace Widgets
         {
             get
             {
-                ICore core = (ICore)model;
-                return core.TimeSinceStart;
+                return timeSinceStart;
             }
         }
 
