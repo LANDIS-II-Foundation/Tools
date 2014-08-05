@@ -37,7 +37,29 @@ namespace Widgets
         private List<ExtensionMain> disturbAndOtherExtensions;
         private SuccessionMain succession;
         // Resolve warning about RandomNumberGenerator being never assigned to
-        private static Generator RandomNumberGenerator = new MT19937Generator();
+        private static Generator RandomNumberGenerator;
+        private static BetaDistribution betaDist;
+        private static BetaPrimeDistribution betaPrimeDist;
+        private static CauchyDistribution cauchyDist;
+        private static ChiDistribution chiDist;
+        private static ChiSquareDistribution chiSquareDist;
+        private static ContinuousUniformDistribution continuousUniformDist;
+        private static ErlangDistribution erlangDist;
+        private static ExponentialDistribution exponentialDist;
+        private static FisherSnedecorDistribution fisherSnedecorDist;
+        private static FisherTippettDistribution fisherTippettDist;
+        private static GammaDistribution gammaDist;
+        private static LaplaceDistribution laplaceDist;
+        private static LognormalDistribution lognormalDist;
+        private static NormalDistribution normalDist;
+        private static ParetoDistribution paretoDist;
+        private static PowerDistribution powerDist;
+        private static RayleighDistribution rayleighDist;
+        private static StudentsTDistribution studentsTDist;
+        private static TriangularDistribution triangularDist;
+        private static WeibullDistribution weibullDist;
+        private static PoissonDistribution poissonDist;
+
         private Model model;
         private IUserInterface ui;
 
@@ -69,7 +91,7 @@ namespace Widgets
 
             ScenarioParser parser = new ScenarioParser(extensionDataset);
             Scenario scenario = Landis.Data.Load<Scenario>(scenarioTextFilePath, parser);
-            InitializeRandomNumGenerator(scenario.RandomNumberSeed, model, ui);
+            InitializeRandomNumGenerator(scenario.RandomNumberSeed);
             LoadSpecies(scenario.Species, ui);
             LoadEcoregions(scenario.Ecoregions, ui);
 
@@ -104,15 +126,15 @@ namespace Widgets
             //InitExtensions(otherExtensions);
         }
 
-        private static void InitializeRandomNumGenerator(uint? seed, Model model, IUserInterface ui)
+        private void InitializeRandomNumGenerator(uint? seed)
         {
             if (seed.HasValue)
-                model.Initialize(seed.Value);
+                Initialize(seed.Value);
             else
             {
-                uint generatedSeed = model.GenerateSeed();
-                model.Initialize(generatedSeed);
-                //ui.WriteLine("Initialized random number generator with seed = {0:#,##0}", generatedSeed);
+                uint generatedSeed = GenerateSeed();
+                Initialize(generatedSeed);
+                ui.WriteLine("Initialized random number generator with seed = {0:#,##0}", generatedSeed);
             }
         }
 
@@ -189,7 +211,7 @@ namespace Widgets
         {
             get
             {
-                return model.BetaDistribution;
+                return betaDist;
             }
         }
 
@@ -199,7 +221,7 @@ namespace Widgets
         {
             get
             {
-                return model.BetaPrimeDistribution;
+                return betaPrimeDist;
             }
         }
 
@@ -209,7 +231,7 @@ namespace Widgets
         {
             get
             {
-                return model.CauchyDistribution;
+                return cauchyDist;
             }
         }
 
@@ -219,7 +241,7 @@ namespace Widgets
         {
             get
             {
-                return model.ChiDistribution;
+                return chiDist;
             }
         }
 
@@ -229,7 +251,7 @@ namespace Widgets
         {
             get
             {
-                return model.ChiSquareDistribution;
+                return chiSquareDist;
             }
         }
 
@@ -239,7 +261,7 @@ namespace Widgets
         {
             get
             {
-                return model.ContinuousUniformDistribution;
+                return continuousUniformDist;
             }
         }
 
@@ -249,7 +271,7 @@ namespace Widgets
         {
             get
             {
-                return model.ErlangDistribution;
+                return erlangDist;
             }
         }
 
@@ -259,7 +281,7 @@ namespace Widgets
         {
             get
             {
-                return model.ExponentialDistribution;
+                return exponentialDist;
             }
         }
 
@@ -269,7 +291,7 @@ namespace Widgets
         {
             get
             {
-                return model.FisherSnedecorDistribution;
+                return fisherSnedecorDist;
             }
         }
 
@@ -279,7 +301,7 @@ namespace Widgets
         {
             get
             {
-                return model.FisherTippettDistribution;
+                return fisherTippettDist;
             }
         }
 
@@ -289,7 +311,7 @@ namespace Widgets
         {
             get
             {
-                return model.GammaDistribution;
+                return gammaDist;
             }
         }
 
@@ -299,7 +321,7 @@ namespace Widgets
         {
             get
             {
-                return model.LaplaceDistribution;
+                return laplaceDist;
             }
         }
 
@@ -309,7 +331,7 @@ namespace Widgets
         {
             get
             {
-                return model.LognormalDistribution;
+                return lognormalDist;
             }
         }
 
@@ -319,7 +341,7 @@ namespace Widgets
         {
             get
             {
-                return model.NormalDistribution;
+                return normalDist;
             }
         }
 
@@ -329,7 +351,7 @@ namespace Widgets
         {
             get
             {
-                return model.ParetoDistribution;
+                return paretoDist;
             }
         }
 
@@ -339,7 +361,7 @@ namespace Widgets
         {
             get
             {
-                return model.PowerDistribution;
+                return powerDist;
             }
         }
 
@@ -349,7 +371,7 @@ namespace Widgets
         {
             get
             {
-                return model.RayleighDistribution;
+                return rayleighDist;
             }
         }
 
@@ -359,7 +381,7 @@ namespace Widgets
         {
             get
             {
-                return model.StudentsTDistribution;
+                return studentsTDist;
             }
         }
 
@@ -369,7 +391,7 @@ namespace Widgets
         {
             get
             {
-                return model.TriangularDistribution;
+                return triangularDist;
             }
         }
 
@@ -379,7 +401,7 @@ namespace Widgets
         {
             get
             {
-                return model.WeibullDistribution;
+                return weibullDist;
             }
         }
 
@@ -389,7 +411,7 @@ namespace Widgets
         {
             get
             {
-                return model.PoissonDistribution;
+                return poissonDist;
             }
         }
 
@@ -556,14 +578,35 @@ namespace Widgets
 
         public void Initialize(uint seed)
         {
-            model.Initialize(seed);
+            RandomNumberGenerator = new MT19937Generator(seed);
+            betaDist = new BetaDistribution(RandomNumberGenerator);
+            betaPrimeDist = new BetaPrimeDistribution(RandomNumberGenerator);
+            cauchyDist = new CauchyDistribution(RandomNumberGenerator);
+            chiDist = new ChiDistribution(RandomNumberGenerator);
+            chiSquareDist = new ChiSquareDistribution(RandomNumberGenerator);
+            continuousUniformDist = new ContinuousUniformDistribution(RandomNumberGenerator);
+            erlangDist = new ErlangDistribution(RandomNumberGenerator);
+            exponentialDist = new ExponentialDistribution(RandomNumberGenerator);
+            fisherSnedecorDist = new FisherSnedecorDistribution(RandomNumberGenerator);
+            fisherTippettDist = new FisherTippettDistribution(RandomNumberGenerator);
+            gammaDist = new GammaDistribution(RandomNumberGenerator);
+            laplaceDist = new LaplaceDistribution(RandomNumberGenerator);
+            lognormalDist = new LognormalDistribution(RandomNumberGenerator);
+            normalDist = new NormalDistribution(RandomNumberGenerator);
+            paretoDist = new ParetoDistribution(RandomNumberGenerator);
+            powerDist = new PowerDistribution(RandomNumberGenerator);
+            rayleighDist = new RayleighDistribution(RandomNumberGenerator);
+            studentsTDist = new StudentsTDistribution(RandomNumberGenerator);
+            triangularDist = new TriangularDistribution(RandomNumberGenerator);
+            weibullDist = new WeibullDistribution(RandomNumberGenerator);
+            poissonDist = new PoissonDistribution(RandomNumberGenerator);
         }
 
         //---------------------------------------------------------------------
 
         public double NextDouble()
         {
-            return model.NextDouble();
+            return RandomNumberGenerator.NextDouble();
         }
 
         /// <summary>
@@ -604,7 +647,17 @@ namespace Widgets
 
         public List<T> shuffle<T>(List<T> list)
         {
-            return model.shuffle<T>(list);
+            List<T> shuffledList = new List<T>();
+
+            int randomIndex = 0;
+            while (list.Count > 0)
+            {
+                randomIndex = RandomNumberGenerator.Next(list.Count); //Choose a random object in the list
+                shuffledList.Add(list[randomIndex]); //add it to the new, random list
+                list.RemoveAt(randomIndex); //remove to avoid duplicates
+            }
+
+            return shuffledList;
         }
 
         IOutputRaster<TPixel> IRasterFactory.CreateRaster<TPixel>(string path,
