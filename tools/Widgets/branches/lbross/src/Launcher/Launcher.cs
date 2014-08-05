@@ -27,14 +27,20 @@ namespace Launcher
             // Prepend system path with LANDIS GDAL folder so app can find the libraries
             string path = Environment.GetEnvironmentVariable(Constants.ENV_PATH);
             string gdalFolder = WidgetsUtil.GetAppSetting("gdal_folder");
+            string verGdalFolder = "";
             if (gdalFolder != "")
             {
-                string newPath = gdalFolder + ";" + path;
+                verGdalFolder = WidgetsUtil.CurrentGdalFolder(gdalFolder);
+            }
+
+            if (verGdalFolder != "")
+            {
+                string newPath = verGdalFolder + ";" + path;
                 Environment.SetEnvironmentVariable(Constants.ENV_PATH, newPath);
             }
             else
             {
-                Console.WriteLine("unable to locate gdalFolder in config file");
+                Console.WriteLine("unable to configure gdal folder correctly");
             }
 
             // Instantiate text writer
