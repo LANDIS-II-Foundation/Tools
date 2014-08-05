@@ -168,5 +168,38 @@ namespace Widgets
             }
             return iCount;
         }
+
+        public static string CurrentGdalFolder(string gdalRoot)
+        {
+            try
+            {
+                DirectoryInfo dir = new DirectoryInfo(gdalRoot);
+                DirectoryInfo[] dirs = dir.GetDirectories();
+                double highestVer = 0;
+                foreach (DirectoryInfo subdir in dirs)
+                {
+                    double nextSub = 0;
+                    Double.TryParse(subdir.Name, out nextSub);
+                    if (nextSub > highestVer)
+                    {
+                        highestVer = nextSub;
+                    }
+                }
+                if (highestVer > 0)
+                {
+                    return gdalRoot + "\\" + highestVer;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                // An error occured when trying to open the log
+                Console.WriteLine("CurrentGdalFolder Exception: " + ex.Message);
+                return null;
+            }
+        }
     }
 }
