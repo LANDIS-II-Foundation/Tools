@@ -1,1 +1,0 @@
-<landisMetadata><extension name="Output Leaf Biomass Reclass" timeInterval="10"><scenario-replication timeMin="0" timeMax="50" rasterOutCellArea="4" /><outputs><output type="Map" name="reclass1 Forest Type Map" filePath="output-biomass-reclass/bio-reclass1-{timestep}.img" visualize="True" unit="" dataType="Nominal" /></outputs></extension></landisMetadata>
