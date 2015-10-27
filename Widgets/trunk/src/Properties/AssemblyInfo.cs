@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 
 [assembly: AssemblyProduct("LANDIS-II Widgets")]
-[assembly: AssemblyVersion("6.0.*")]
+[assembly: AssemblyVersion("1.1.*")]
 
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]
