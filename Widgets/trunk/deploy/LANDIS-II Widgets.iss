@@ -1,6 +1,6 @@
 #include GetEnv("LANDIS_SDK") + '\packaging\initialize.iss'
 
-#define ExtInfoFile "Widgets 1.0.txt"
+#define ExtInfoFile "Widgets.txt"
 #define CoreMajorVersion "6"
 
 #include LandisSDK + '\packaging\read-ext-info.iss'
